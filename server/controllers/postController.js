@@ -134,4 +134,61 @@ const createPost = async (req, res) => {
             console.log("Error in Like Post",error.message) 
         }
     }
-    export {createPost, getPosts, getPostbyId, updatePost, deletePost, likePost}
+
+// Replay to post
+
+    const replaPost =  async (req, res) => {
+        try {
+            const {text} = req.body
+            const PostId = req.params.id
+            const userId = req.user._id
+            const userProfilePic = req.user.profilePic
+            const username = req.user.username
+
+            console.log(userId, username,userProfilePic)
+
+            if(!text) return res.status(400).json({message:"Text is requied"})
+
+            const post = await Post.findById(PostId)
+            if(!post) return res.status(404).json({message:"Post not fount"})
+
+            const replay = {userId, text, userProfilePic, username}
+
+            post.replies.push(replay)
+            await post.save()
+
+            res.status(200).json({message:"Replay added succesfulyy",replay})
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+            console.log("Error in Replay Post",error.message) 
+        }
+    }
+
+// Get Feed post
+
+    const getFeedPosts = async (req, res) => {
+        
+        try {
+            
+            const userId = req.user._id
+            const user = await User.findById(userId)
+
+            if(!user) return res.status(404).json({message:"user not found"})
+
+            const following = user.following;
+            console.log("folow",following)
+
+        //    const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 });
+           const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 });
+
+            if(!feedPost) return res.status(404).json({message:"Post not fount"})
+
+            res.status(200).json({feedPost:feedPost});
+
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+            console.log("Error in Feed Post",error.message) 
+        }
+    }
+    export {createPost, getPosts, getPostbyId, updatePost, deletePost, likePost, replaPost, getFeedPosts}
