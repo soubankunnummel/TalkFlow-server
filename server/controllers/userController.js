@@ -155,5 +155,16 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
        }
     }
 
-    
-    export  {signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser, getUserProfile}
+// TO see all users
+
+    const allUsers = async (req, res) => {
+        try {
+            const users = User.find()
+            if(!users) return res.status(404).json({message:"Users Not Fount"})
+            res.status(200).json({Users:users})
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            console.log("Error in find all users: ", error.message);
+        }
+    }
+    export  {signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser, getUserProfile, allUsers}

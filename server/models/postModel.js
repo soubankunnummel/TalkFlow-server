@@ -16,12 +16,30 @@ const postSchema = mongoose.Schema(
             type: String,
 
         },
+        thambImg: {
+            type: String,
+
+        },
         likes: {
             // arry of user ids
             type: [mongoose.Schema.Types.ObjectId],
             ref:" User",
             default: []
         },
+        share: [
+            {
+                userId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "User",
+                    required: true
+                },
+                postId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Post",
+                    required: true
+                }
+            }
+        ],
         replies: [
             {
                 userId : {

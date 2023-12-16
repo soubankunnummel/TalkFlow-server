@@ -191,4 +191,49 @@ const createPost = async (req, res) => {
             console.log("Error in Feed Post",error.message) 
         }
     }
-    export {createPost, getPosts, getPostbyId, updatePost, deletePost, likePost, replaPost, getFeedPosts}
+
+/// Share Post
+    const sharePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const { userId } = req.body;
+
+        const user = await User.findById(userId);
+
+        console.log("following",user.following)
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        const sharedPost = {
+            userId: userId,
+            postId: postId,
+        };
+
+        const updatedPost = await Post.findByIdAndUpdate(
+            { _id: postId },
+            { $push: { share: sharedPost } },
+            { new: true }
+        ).populate({ path: "share.userId", select: "username userProfilePic" });
+
+        if (!updatedPost) return res.status(400).json({ message: "Post not shared" });
+
+        // Get users that the current user is following
+        const followingUsers = await User.find({ _id: { $in: user.following } }).select("username userProfilePic");
+            
+        if(!followingUsers) {
+
+         return  res.status(404).json({message:"this is user not a follower"})
+        } 
+            
+
+        return res.status(200).json({
+            message: "Post shared successfully",
+            followingUsers: followingUsers,
+            updatedPost: updatedPost,
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log("Error in Share Post", error.message);
+    }
+};
+
+    export {createPost, getPosts, getPostbyId, updatePost, deletePost, likePost, replaPost, getFeedPosts, sharePost}
