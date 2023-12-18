@@ -200,7 +200,7 @@ const createPost = async (req, res) => {
 
         const user = await User.findById(userId);
 
-        console.log("following",user.following)
+        // console.log("following",user.following)
         if (!user) return res.status(404).json({ message: "User not found" });
 
         const sharedPost = {

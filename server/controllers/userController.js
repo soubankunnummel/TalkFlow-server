@@ -2,6 +2,7 @@
 import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCookie.js'
+// import {v2 as cloudinary} from 'cloudinary';
 
 // To see users profile
 
@@ -124,7 +125,8 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
     const updateUser = async (req, res) => {
         // const {id} = req.params
         const {name, email,  username, password, profilePic, bio} = req.body
-        
+
+        console.log("Profiel pic form boy",profilePic)
         const userId = req.user._id
 
        try {
@@ -139,6 +141,15 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
             const hashedPassword = await bcrypt.hash(password, salt)
             user.password = hashedPassword
         }
+
+        // if(profilePic){
+        //     if(user.profilePic){
+        //         await cloudinary.uploader.destroy(user.profilePic.split("/").pop(".")[0])
+        //     }
+        //     const uploadProfile = await cloudinary.uploader.upload(profilePic)
+        //     console.log(uploadProfile)
+        //     profilePic = uploadProfile.secure_url
+        // }
 
         user.name = name || user.name
         user.email = email || user.email

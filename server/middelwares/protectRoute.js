@@ -11,6 +11,7 @@ import User from "../models/userModel.js";
 
             const user = await User.findById(decoded.userId).select("-password")
 
+            console.log("user form protect rout",user)
             req.user = user
 
             next()

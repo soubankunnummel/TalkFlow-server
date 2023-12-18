@@ -11,6 +11,6 @@ router.post("/signup",trycatch,signupUser )
 router.post("/login",loginUser )
 router.post("/logout",logoutUser )
 router.post("/follow/:id",protectRoute,folloUnfollowUser )
-router.post("/update/:id",protectRoute,updateUser )
+router.put("/update/:id",protectRoute,updateUser )
 
 export default router   
