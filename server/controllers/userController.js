@@ -2,7 +2,9 @@
 import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCookie.js'
-// import {v2 as cloudinary} from 'cloudinary';
+import {v2 as cloudinary} from 'cloudinary';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import passport from 'passport';
 
 // To see users profile
 
@@ -22,35 +24,43 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
     }
 // singup user
 
-    const signupUser  = async (req, res) => {
-        console.log(res.body)
-        const {name, email, username, password} = req.body
-        const user = await User.findOne({ $or: [{email}, {username}]})
-        
-        if(user) {
-            return res.status(400).json({error: "user alredy exists"})
-        }
-        const salt = await bcrypt.genSalt(10)
-        const hashedPassword = await bcrypt.hash(password,salt)
+const signupUser = async (req, res) => {
+    try {
+        const { name, email, username, password } = req.body;
+
+        const existingUser = await User.findOne({ $or: [{ email }, { username }] });
+
+        if (existingUser) {
+            return res.status(400).json({ error: "User already exists" });
+        } 
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create a new user
         const newUser = new User({
             name,
             email,
             username,
-            password:hashedPassword
-        })
-        await newUser.save()
-        if(newUser){ 
-            generateTokenAndSetCookie(newUser._id, res)
-            res.status(201).json({
-                _id: newUser._id,
-                name:newUser.name,
-                email:newUser.email,
-                username:newUser.username
-            })
-        }else{
-            res.status(400).json({message:"Invalid user data"})
-        }
-    } 
+            password: hashedPassword,
+        });
+
+    
+        await newUser.save();
+        generateTokenAndSetCookie(newUser._id, res);
+        
+        res.status(201).json({
+            _id: newUser._id,
+            name: newUser.name,
+            email: newUser.email,
+            username: newUser.username,
+        });
+    } catch (error) {
+        console.error("Error in signupUser:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
     
 // login user
 
@@ -123,8 +133,9 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
 // Update Usesr 
 
     const updateUser = async (req, res) => {
-        // const {id} = req.params
-        const {name, email,  username, password, profilePic, bio} = req.body
+        // console.log("creaded")
+        const {name, email,  username, password, bio} = req.body
+        let {profilePic} = req.body
 
         console.log("Profiel pic form boy",profilePic)
         const userId = req.user._id
@@ -142,14 +153,13 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
             user.password = hashedPassword
         }
 
-        // if(profilePic){
-        //     if(user.profilePic){
-        //         await cloudinary.uploader.destroy(user.profilePic.split("/").pop(".")[0])
-        //     }
-        //     const uploadProfile = await cloudinary.uploader.upload(profilePic)
-        //     console.log(uploadProfile)
-        //     profilePic = uploadProfile.secure_url
-        // }
+        if(profilePic){
+            if(user.profilePic){
+                await cloudinary.uploader.destroy(user.profilePic.split("/").pop(".")[0])
+            }
+            // const uploadProfile = await cloudinary.uploader.upload(profilePic)
+            // profilePic = uploadProfile.secure_url
+        }
 
         user.name = name || user.name
         user.email = email || user.email
@@ -178,4 +188,50 @@ import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCooki
             console.log("Error in find all users: ", error.message);
         }
     }
-    export  {signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser, getUserProfile, allUsers}
+
+// Googel login 
+    const googleLogin = async (req, res) => {
+        res.status(200).json({message:"Login Success"})
+    }
+
+    const success = async (req, res) => {
+        res.json({message:"Success"})
+    }
+// const googleLogin = async (req, res) => {
+//     console.log(req.body)
+//     // Google login logic
+//     // Implement the logic to handle the Google login callback and user creation if not exists
+    
+//     try {
+//         const { id, displayName, emails } = req.user;
+//         let user = await User.findOne({ googleId: id });
+
+//         if (!user) {
+//             user = await User.create({
+//                 username: displayName,
+//                 email: emails[0].value,
+//                 googleId: id,
+//             });
+//         }
+
+//         generateTokenAndSetCookie(user._id, res);
+
+//         res.status(200).json({
+//             _id: user._id,
+//             name: user.name,
+//             email: user.email,
+//             username: user.username,
+//             profilePic: user.profilePic,
+//             bio: user.bio,
+//         });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//         console.error('Error in loginWithGoogle ', error.message);
+//     }
+// };
+    export  {signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser, getUserProfile, allUsers, googleLogin, success}
+
+   // TODO: add admin  section
+
+    //TODO: add google login
+    //TODO: add forgot passwoerd

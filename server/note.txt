@@ -16,5 +16,33 @@ module.exports = ErroHandler
 
 
 
+middleware for the Post image upload
+----------------------------------------
+
+const imageUpload = (fieldname) => async (req, res, next) => {
+    upload.single(fieldname)(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+        try {
+            const result = await cloudinary.uploader.upload(req.file.path, {
+                folder: `TalkFlow-${fieldname}`, // Use the fieldname to specify the folder
+            });
+            console.log("result in cloudinary middleware", result);
+            req.body[fieldname] = result.secure_url;
+            fs.unlink(req.file.path, (unlinkErr) => {
+                if (unlinkErr) {
+                    console.log("Error deleting local file", unlinkErr);
+                }
+            });
+            next();
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            console.log("Error in image upload: ", error.message);
+        }
+    });
+};
+
+module.exports = imageUpload;
 
 
