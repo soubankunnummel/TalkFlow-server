@@ -9,6 +9,6 @@ const sessionConfig = {
     resave: true,
     saveUninitialized: true,
 };
-
+ 
 export default session(sessionConfig);
 

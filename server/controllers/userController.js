@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCookie.js'
 import {v2 as cloudinary} from 'cloudinary';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import passport from 'passport';
+// import passport, { use } from 'passport';
 
 // To see users profile
 
@@ -27,6 +27,7 @@ import passport from 'passport';
 const signupUser = async (req, res) => {
     try {
         const { name, email, username, password } = req.body;
+        console.log(name)
 
         const existingUser = await User.findOne({ $or: [{ email }, { username }] });
 
@@ -191,7 +192,33 @@ const signupUser = async (req, res) => {
 
 // Googel login 
     const googleLogin = async (req, res) => {
-        res.status(200).json({message:"Login Success"})
+        console.log(req)
+
+        try {
+            const {id, displayName, emails} = req.user
+            let user = await User.findOne({googleId: id})
+
+            if (user) {
+                user = await User.create({
+                    username: displayName,
+                    email: emails[0].value,
+                    googleId: id,
+
+                })
+            }
+            generateTokenAndSetCookie(user._id, res)
+            res.status(200).json({
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                username: user.username,
+                profilePic: user.profilePic,
+                bio: user.bio,
+            })
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+            console.error('Error in loginWithGoogle ', error.message);
+        }
     }
 
     const success = async (req, res) => {
