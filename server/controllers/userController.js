@@ -3,6 +3,8 @@ import User from '../models/userModel.js'
 import bcrypt from 'bcryptjs'
 import generateTokenAndSetCookie from '../utils/helpers/generateTokenAndSetCookie.js'
 import {v2 as cloudinary} from 'cloudinary';
+import randomstring from 'randomstring'
+import nodemailer from 'nodemailer'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 // import passport, { use } from 'passport';
 
@@ -85,7 +87,7 @@ const signupUser = async (req, res) => {
             console.log("Err in loginuser ",error.message)
         }
         
-        }
+    }
 
 //logout user
 
@@ -191,6 +193,7 @@ const signupUser = async (req, res) => {
     }
 
 // Googel login 
+
     const googleLogin = async (req, res) => {
         console.log(req)
 
@@ -220,10 +223,110 @@ const signupUser = async (req, res) => {
             console.error('Error in loginWithGoogle ', error.message);
         }
     }
+// forgot passwoer 
 
-    const success = async (req, res) => {
-        res.json({message:"Success"})
+const fogotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        const otp = randomstring.generate({ length: 6, charset: 'numeric' });
+
+        user.resetPasswordOTP = otp;
+        await user.save();
+
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: process.env.GMAIL_EMAIL,
+                pass: process.env.GMAIL_PASSWORD,
+            }
+        });
+
+        const mailOptions = {
+            from: process.env.GMAIL_EMAIL,
+            to: email,
+            subject: 'Password Reset OTP',
+            text: `Your OTP for password reset is: ${otp}`,
+        };
+
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error, "info:", info);
+                return res.status(500).json({ error: 'Failed to send OTP email' });
+            }
+
+            console.log('Email sent: ' + info.response);
+            res.status(200).json({ message: 'OTP sent to your email' });
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.error('Error in Forgot password: ', error.message);
     }
+};
+
+// validate otp 
+
+const validateOTP = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        function isOtpExpired(otpGeneratedAt) {
+            const expirationTimeInMinutes = 15; // Adjust as needed
+            const now = new Date();
+            const otpGeneratedTime = new Date(otpGeneratedAt);
+
+            return now - otpGeneratedTime > expirationTimeInMinutes * 60 * 1000;
+        }
+
+        if (otp !== user.resetPasswordOTP || isOtpExpired(user.resetPasswordOTPGeneratedAt)) {
+            return res.status(400).json({ error: 'Invalid OTP' });
+        }
+
+        res.status(200).json({ message: 'OTP validation successful' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.error('Error in validateOTP', error.message);
+    }
+};
+
+// Reset passwoerd 
+
+const resetPassword = async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+        }
+
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        user.resetPasswordOTP = null;
+        await user.save();
+
+        res.status(200).json({ message: 'Password reset successfully' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.error('Error in resetPassword', error.message);
+    }
+};
+
+  
 // const googleLogin = async (req, res) => {
 //     console.log(req.body)
 //     // Google login logic
@@ -253,10 +356,16 @@ const signupUser = async (req, res) => {
 //         });
 //     } catch (error) {
 //         res.status(500).json({ message: error.message });
-//         console.error('Error in loginWithGoogle ', error.message);
+//         console.error('Error in loginWithGoogle ', error.message); 
 //     }
 // };
-    export  {signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser, getUserProfile, allUsers, googleLogin, success}
+    export  {
+                signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser,
+                getUserProfile, allUsers, googleLogin,fogotPassword,resetPassword,
+                validateOTP
+
+            
+            }
 
    // TODO: add admin  section
 

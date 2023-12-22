@@ -1,5 +1,5 @@
 import express from 'express'
-import { allUsers, folloUnfollowUser, getUserProfile, googleLogin, loginUser, logoutUser, signupUser, success, updateUser } from '../controllers/userController.js';
+import { allUsers, fogotPassword, folloUnfollowUser, getUserProfile, googleLogin, loginUser, logoutUser, resetPassword, signupUser, updateUser } from '../controllers/userController.js';
 // import trycatch from '../middelwares/trycatch.js'
 import protectRoute from '../middelwares/protectRoute.js';
 import imageUpload from '../middelwares/imageUpload.cjs';
@@ -12,6 +12,8 @@ router.get("/users",allUsers)
 router.post("/signup",signupUser )
 router.post("/login",loginUser )
 router.post("/login/google",googleLogin)
+router.post("/forgot-password",fogotPassword)
+router.post("/reset-password",resetPassword)
 
 // router.get('/success',success)
 // router.get('/login/google', passport.authenticate('google', {scope: ["profile", "email"]}), googleLogin);
