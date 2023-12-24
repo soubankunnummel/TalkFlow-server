@@ -2,7 +2,7 @@ import Post  from "../models/postModel.js"
 import User from "../models/userModel.js"
 
 
-// Create a post 
+// Create a post  
 
 const createPost = async (req, res) => {
     try {
@@ -13,6 +13,7 @@ const createPost = async (req, res) => {
         }
 
         const user = await User.findById(postedBy);
+       const username = user.username
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -31,7 +32,7 @@ const createPost = async (req, res) => {
         const newPost = new Post({ postedBy, text, img });
         await newPost.save();
 
-        res.status(201).json({ message: "New post created", newPost });
+        res.status(201).json({ message: "New post created", newPost , username});
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log("Error in createPost: ", error.message);
@@ -43,7 +44,13 @@ const createPost = async (req, res) => {
 
     const getPosts = async (req,res) => {
         try {
-            const post = await Post.find()
+
+            const post = await Post.find().populate({
+                path: 'postedBy',
+                select: 'username', 
+            })
+
+            
             if(!post) return res.status(400).json({message:"No Post yet"})
             res.status(200).json(post)
         } catch (error) {

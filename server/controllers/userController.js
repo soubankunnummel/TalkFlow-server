@@ -57,6 +57,7 @@ const signupUser = async (req, res) => {
             name: newUser.name,
             email: newUser.email,
             username: newUser.username,
+           
         });
     } catch (error) {
         console.error("Error in signupUser:", error);
@@ -66,7 +67,7 @@ const signupUser = async (req, res) => {
 
     
 // login user
-
+ 
     const loginUser = async (req, res) => {
         
         try {
@@ -76,11 +77,14 @@ const signupUser = async (req, res) => {
             if( !user || !isPsswordChek ) return res.status(400).json({error:"Invalid username or password"})
     
             generateTokenAndSetCookie(user._id, res)
+            // console.log( generateTokenAndSetCookie(user._id, res))
             res.status(200).json({
                 _id: user._id,
                 name: user.name,
                 email:user.email,
-                username: user.username
+                username: user.username,
+                token: generateTokenAndSetCookie(user._id, res)
+                
             })
         } catch (error) {
             res.status(500).json({message:error.message})
@@ -92,6 +96,7 @@ const signupUser = async (req, res) => {
 //logout user
 
     const logoutUser = async (req, res) => {
+        console.log(req.body)
         try {
             res.cookie("jwt", "", {maxAge:1})
             res.status(200).json({message:"User logged out succesfully"})
@@ -235,7 +240,7 @@ const fogotPassword = async (req, res) => {
         }
 
         const otp = randomstring.generate({ length: 6, charset: 'numeric' });
-
+        
         user.resetPasswordOTP = otp;
         await user.save();
 
@@ -274,6 +279,7 @@ const fogotPassword = async (req, res) => {
 const validateOTP = async (req, res) => {
     try {
         const { email, otp } = req.body;
+        console.log(otp)
         const user = await User.findOne({ email });
 
         if (!user) {
@@ -288,7 +294,7 @@ const validateOTP = async (req, res) => {
             return now - otpGeneratedTime > expirationTimeInMinutes * 60 * 1000;
         }
 
-        if (otp !== user.resetPasswordOTP || isOtpExpired(user.resetPasswordOTPGeneratedAt)) {
+        if (otp !== user.resetPasswordOTP && isOtpExpired(user.resetPasswordOTPGeneratedAt)) {
             return res.status(400).json({ error: 'Invalid OTP' });
         }
 

@@ -13,7 +13,7 @@ const postSchema = mongoose.Schema(
 
         },
         img: {
-            type: String,
+            type: String, 
 
         },
         thambImg: {
