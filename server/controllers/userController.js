@@ -102,7 +102,7 @@ const signupUser = async (req, res) => {
             res.status(200).json({message:"User logged out succesfully"})
         } catch (error) {
             res.status(500).json({message:error.message})
-            console.log("Err in logout ",error.message)
+            console.log("Err in logout ",error) 
         }
     }
 

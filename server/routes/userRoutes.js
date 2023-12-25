@@ -26,7 +26,7 @@ router.post("/login", loginUser);
 router.post("/login/google", googleLogin);
 router.post("/forgot-password", fogotPassword);
 router.post("/verify-otp",validateOTP)
-router.post("/reset-password", resetPassword);
+router.post("/reset-password", resetPassword); 
 
 // router.get('/success',success)
 // router.get('/login/google', passport.authenticate('google', {scope: ["profile", "email"]}), googleLogin);

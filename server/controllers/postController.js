@@ -13,7 +13,7 @@ const createPost = async (req, res) => {
         }
 
         const user = await User.findById(postedBy);
-       const username = user.username
+       
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -32,7 +32,7 @@ const createPost = async (req, res) => {
         const newPost = new Post({ postedBy, text, img });
         await newPost.save();
 
-        res.status(201).json({ message: "New post created", newPost , username});
+        res.status(201).json({ message: "New post created", newPost});
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log("Error in createPost: ", error.message);
@@ -47,7 +47,8 @@ const createPost = async (req, res) => {
 
             const post = await Post.find().populate({
                 path: 'postedBy',
-                select: 'username', 
+                select: ['username', 'profilePic']
+                
             })
 
             
