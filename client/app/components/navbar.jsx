@@ -26,7 +26,7 @@ function NavBar() {
       if (response) {
         alert("Logged out");
         // setCookieToken(null);
-        router.push("/");
+        router.push("/page/login");
       }
     } catch (error) {
       console.log("Erro in Logout ui", error);

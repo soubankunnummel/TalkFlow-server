@@ -153,7 +153,11 @@ const createPost = async (req, res) => {
             const userProfilePic = req.user.profilePic
             const username = req.user.username
 
-            console.log(userId, username,userProfilePic)
+            console.log("userId :",userId, username,userProfilePic)
+
+            const user = await User.findById(userId)
+
+            if(!user) return res.status(404).json({message:"User not fount"})
 
             if(!text) return res.status(400).json({message:"Text is requied"})
 
@@ -165,6 +169,8 @@ const createPost = async (req, res) => {
             post.replies.push(replay)
             await post.save()
 
+            user.repliedPosts.push(PostId);
+            await user.save()
             res.status(200).json({message:"Replay added succesfulyy",replay})
 
         } catch (error) {
@@ -172,6 +178,26 @@ const createPost = async (req, res) => {
             console.log("Error in Replay Post",error.message) 
         }
     }
+
+// get Replied posts 
+
+const getRepliedPosts = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        console.log(userId)
+    //     const user = await User.findById(userId).populate('repliedPosts');
+
+    //     if (!user) {
+    //         return res.status(404).json({ message: "User not found" });
+    //     }
+
+    //     const repliedPosts = user.repliedPosts;
+    //     res.status(200).json({ repliedPosts });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.log("Error in getRepliedPosts:", error.message);
+    }
+};
 
 // Get Feed post
 
@@ -244,4 +270,5 @@ const createPost = async (req, res) => {
     }
 };
 
-    export {createPost, getPosts, getPostbyId, updatePost, deletePost, likePost, replaPost, getFeedPosts, sharePost}
+    export {createPost, getPosts, getPostbyId, updatePost,
+         deletePost, likePost, replaPost, getFeedPosts, sharePost, getRepliedPosts}

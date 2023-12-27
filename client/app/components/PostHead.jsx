@@ -1,11 +1,10 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import ForYou from "./Foryou";
 import FolloWing from "./Following";
 
 const PostHead = () => {
-  const [activeComponent, setActiveComponent] = useState(null);
-  const [foryou, setForyou] = useState(true);
+  const [activeComponent, setActiveComponent] = useState(false);
 
   const [data ,setData] = useState()
   return (
@@ -34,15 +33,14 @@ const PostHead = () => {
         
       </div>
       <div className="w-full h-10 flex md:hidden bg-black">
-        {
-foryou&&
+ 
 
 
           <ForYou
           isActive={activeComponent === "ForYou"}
           setActiveComponent={setActiveComponent}
           />
-        }
+        
         <FolloWing
           isActive={activeComponent === "Following"}
           setActiveComponent={setActiveComponent}

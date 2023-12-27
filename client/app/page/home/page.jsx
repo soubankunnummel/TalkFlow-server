@@ -1,11 +1,10 @@
 "use client"
 import Post from "@/app/components/Post";
-import PostHead from "@/app/components/PostHead";
 import { useRouter } from "next/navigation";
-// import Navbar from "@/app/components/navbar";
 import React, { useState } from "react";
 import Profile from "../profile/page";
- 
+import ForuFollow from "@/app/components/ForuFollow";
+  
 
 function Home() {
   const router = useRouter();  
@@ -18,6 +17,8 @@ function Home() {
 
       {/* <Post/> */}
       {profile ? <Profile/> : <Post/>}
+
+
       
      
       

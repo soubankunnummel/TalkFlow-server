@@ -48,6 +48,11 @@ const userSchima = mongoose.Schema({
         type: Date,
         default: null,
     },
+    repliedPosts: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Post",
+        default: [],
+    },
 },{
     timestamps: true,
 }

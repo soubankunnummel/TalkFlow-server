@@ -1,8 +1,6 @@
-import { Inter } from "next/font/google";
+import { Inter } from "next/font/google"; 
 import "./globals.css";
-import { createWrapper } from "next-redux-wrapper";
-import { Provider } from "react-redux";
-import { store } from "./Redux/store/store";
+// import StoreProvider from "./Redux/store/storeProvider";
 
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
@@ -19,14 +17,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <>
-      {/* <Provider> */}
+    {/* <StoreProvider> */}
         <html lang="en">
           <body className={inter.className}>
             
             {children}
             </body>
         </html>
-      {/* </Provider> */}
+        {/* </StoreProvider> */}
     </>
   );
 }

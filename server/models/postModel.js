@@ -40,7 +40,7 @@ const postSchema = mongoose.Schema(
                 }
             }
         ],
-        replies: [
+        replies: [ 
             {
                 userId : {
                     type: mongoose.Schema.Types.ObjectId,

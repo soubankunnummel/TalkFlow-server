@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
+import useFolloPost from "../zustand/posts/followPost";
 
 function FolloWing({ isActive, setActiveComponent }) {
-  useEffect(() => {
-    handlFollwing();
-  }, []);
+
+  const {setOutfeed}=useFolloPost()
+  // useEffect(() => {
+  //   handlFollwing();
+    
+  // }, []);
 
   const handlFollwing = async () => {
     if (!isActive) {
@@ -20,7 +24,7 @@ function FolloWing({ isActive, setActiveComponent }) {
         } `}
         onClick={handlFollwing}
       >
-        <button>Following</button>
+        <button className="w-full h-full" onClick={()=>setOutfeed()}>Following</button>
       </div>
     </>
   );

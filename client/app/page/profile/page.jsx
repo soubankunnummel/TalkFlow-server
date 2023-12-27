@@ -1,6 +1,9 @@
 import { IoIosMore } from "react-icons/io";
 import { MdAddCircle } from "react-icons/md";
 import { FaInstagram } from "react-icons/fa6";
+import Threads from "@/app/components/Threads";
+import Replies from "@/app/components/Replies";
+import Reposts from "@/app/components/Reposts";
 
 function Profile() {
   return (
@@ -10,7 +13,7 @@ function Profile() {
           <div className=" w-1/2 h-auto flex flex-col justify-start">
             <span>souban</span>
 
-            {/* user name and btn */}
+            {/* user name and btn */} 
 
             <div className="flex gap-6">
               <span>usename </span>
@@ -94,11 +97,13 @@ function Profile() {
         <button className="w-full h-9 bg-transparent border border-solid text-center rounded-md mt-3">
           Edit Profile
         </button>
-          <div className="w-full h-9 bg-white flex justify-between items-center text-black text-center mt-2">
-                 <div>threads</div>
-                 <div>Repliese</div>
-                 <div>Reposts</div>
+          <div className="w-full h-9 bg-white flex justify-between items-center text-black text-center mt-2 p-3">
+                 <Threads/>
+                 <Replies/>
+                 <Reposts/>
+                 
           </div>
+          
 
       </div>
     </>

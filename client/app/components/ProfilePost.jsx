@@ -1,51 +1,23 @@
-"use client";
+import React from 'react'
+import { IoIosMore } from 'react-icons/io'
+import { MdAddCircle } from 'react-icons/md'
+import Like from './Like'
+import Coment from './Coment'
+import Repost from './Repost'
+import Share from './Share'
+import Loading from './Loading'
 
-import { MdAddCircle } from "react-icons/md";
-import { IoIosMore } from "react-icons/io";
-import PostHead from "./PostHead";
-import { useEffect, useState } from "react";
-import { getPost } from "../service/post";
-import Loading from "./Loading";
-import Like from "./Like";
-import Coment from "./Coment";
-import Share from "./Share";
-import Repost from "./Repost";
-import FollowPost from "./FollowPost";
-import useFolloPost from "../zustand/posts/followPost";
-import ForuFollow from "./ForuFollow";
-// import { useDispatch, useSelector } from "react-redux";
-// import postsSlice, { setPost } from "../Redux/store/posts/postsSlice";
-
-const Post = () => {
-  const { feed } = useFolloPost();
-  const [post, setPost] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await getPost();
-
-        if (response) {
-          setPost(response);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.log("Erro in post componet fech post", error);
-      }
-    };
-    fetchPosts();
-  }, []);
-
+function ProfilePost() {
+    const [loading, setLoading] = useState(true);
   return (
     <>
-      {loading ? (
+       {loading ? (
         <Loading />
       ) : (
         <>
-          <PostHead />
-          {!feed ? (
-            <>
+         
+         
+            
               {post.map((item) => (
                 <div
                   className=" w-full md:w-[580px] h-auto  md:p-2 p-3 flex flex-col  justify-between items-center mb-10 "
@@ -102,16 +74,14 @@ const Post = () => {
                   </div>
                 </div>
               ))}
-            </>
-          ) : (
-            <FollowPost />
-          )}
+           
+         
 
-          <ForuFollow />
+        
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Post;
+export default ProfilePost

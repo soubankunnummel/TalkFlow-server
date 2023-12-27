@@ -3,7 +3,9 @@ import { forgorPassword, loginuser } from "@/app/service/auth";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
-import Loading from "@/app/components/Loading";
+import Loading from "@/app/components/Loading"; 
+import { signIn } from "next-auth/react"
+
 function login() {
   const router = useRouter();
   const [email, setEmail] = useState("")
@@ -23,6 +25,7 @@ function login() {
   const handleLogin = async () => {
     if (login.username === "" || login.password === "")
       return alert("pleas fill all inputs");
+      setLoading(true)
     try {
       const response = await loginuser(login);
 
@@ -40,9 +43,14 @@ function login() {
 
 // google login
 
-  const handleGoogleLogin = () => {
-    console.log("clicekd");
-  };
+const handleGoogleLogin =  () => {
+  // try {
+      signIn("google")
+      router.push("/");
+  // } catch (error) {
+  //   console.error("Error in handleGoogleLogin", error)
+  // }
+};
 
   const handleForgot = async (e) => {
     try {
