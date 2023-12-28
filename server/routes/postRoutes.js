@@ -13,7 +13,7 @@ router.delete("/:id",protectRoute,deletePost)
 router.post("/like/:id",protectRoute,likePost)
 router.post("/replay/:id",protectRoute,replaPost)
 router.post("/share/:id", protectRoute,sharePost)
-router.get('/replies',protectRoute, getRepliedPosts)
-router.get("/replies",protectRoute,getRepliedPosts)
+// router.get('/replies',protectRoute, getRepliedPosts)
+router.post("/replies",protectRoute,getRepliedPosts)
 
 export default router

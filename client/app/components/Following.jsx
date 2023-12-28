@@ -3,7 +3,7 @@ import useFolloPost from "../zustand/posts/followPost";
 
 function FolloWing({ isActive, setActiveComponent }) {
 
-  const {setOutfeed}=useFolloPost()
+  const {setOutfeed}=useFolloPost() 
   // useEffect(() => {
   //   handlFollwing();
     

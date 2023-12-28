@@ -5,7 +5,7 @@ import { IoIosMore } from "react-icons/io";
 import PostHead from "./PostHead";
 import { useEffect, useState } from "react";
 import { getPost } from "../service/post";
-import Loading from "./Loading";
+import Loading from "./Loading"; 
 import Like from "./Like";
 import Coment from "./Coment";
 import Share from "./Share";

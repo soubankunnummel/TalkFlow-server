@@ -1,7 +1,7 @@
 // auth.js
 import axios from "axios";
 import Axios from "./axios";
-import useToken from "./Token";
+import useToken from "./context";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const { setToken: setCookieToken } = useToken();

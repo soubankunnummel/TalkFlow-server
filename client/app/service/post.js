@@ -26,3 +26,18 @@ export const getPost = async () => {
             console.log("Error in get Feed",getFeed)
         }
     }
+
+/// Post by ID 
+
+export const gePostbyId = async () => {
+    try {
+        const response = await Axios.get(`/api/posts/${id}`)
+        if(response.status === 200){
+            return response.data
+        }
+    } catch (error) {
+        console.log("Error in get PostBy id",error.message)
+        
+    }
+}
+

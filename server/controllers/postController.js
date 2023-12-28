@@ -177,7 +177,7 @@ const createPost = async (req, res) => {
             res.status(500).json({ message: error.message });
             console.log("Error in Replay Post",error.message) 
         }
-    }
+    } 
 
 // get Replied posts 
 
@@ -185,14 +185,16 @@ const getRepliedPosts = async (req, res) => {
     try {
         const userId = req.user._id;
         console.log(userId)
-    //     const user = await User.findById(userId).populate('repliedPosts');
 
-    //     if (!user) {
-    //         return res.status(404).json({ message: "User not found" });
-    //     }
+    
+        const user = await User.findById(userId).populate('repliedPosts');
 
-    //     const repliedPosts = user.repliedPosts;
-    //     res.status(200).json({ repliedPosts });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const repliedPosts = user.repliedPosts;
+        res.status(200).json({ repliedPosts });
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log("Error in getRepliedPosts:", error.message);
@@ -230,6 +232,7 @@ const getRepliedPosts = async (req, res) => {
     const sharePost = async (req, res) => {
     try {
         const postId = req.params.id;
+
         const { userId } = req.body;
 
         const user = await User.findById(userId);

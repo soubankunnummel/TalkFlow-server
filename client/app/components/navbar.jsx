@@ -1,23 +1,67 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { MdOutlineSort } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { HiHome, HiUser } from "react-icons/hi2";
-import { FaRegHeart } from "react-icons/fa6";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "../service/auth";
 import { CgMoreO } from "react-icons/cg";
+import useProfile from "../zustand/posts/profilePost";
+import { GoHeart } from "react-icons/go";
+import { gerUserProfile, getUsr } from "../service/users";
+import usePosts from "../zustand/posts/posts";
 
 
 
 function NavBar() {
-  const router = useRouter();
-  const handleSearchButtonClick = () => {
-    router.push("/page/search");
-  };
+  const storePost = usePosts()
+  let username 
+  const { setProfile, setOutProfile, setSearch, setOutSearch, setLikes, setOutLikes } = useProfile();
 
+  useEffect(() => {
+    getUser()
+  },[])
+
+  const getUser = async () => {
+    try {
+      const response = await getUsr()
+      console.log(response.username)
+      if(response) {
+        username = response.username
+      }
+    } catch (error) {
+      console.log("Error in nave bar")
+    }
+  }
+  const router = useRouter();
+  
+  const handleSearch = async () => {
+    setSearch()
+  }
+  
+  const handleProfile = async () => {
+    try {
+      const response = await gerUserProfile(username)
+      console.log(response)
+      if(response){
+        storePost.setPost(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
+   
+    setProfile()
+
+  }
+
+  const handleLikes = () => {
+    setLikes()
+  }
+
+  
+ 
   // logout
 
   const handleLogout = async () => {
@@ -25,7 +69,6 @@ function NavBar() {
       const response = await logoutUser(); 
       if (response) {
         alert("Logged out");
-        // setCookieToken(null);
         router.push("/page/login");
       }
     } catch (error) {
@@ -57,12 +100,14 @@ function NavBar() {
         ></div>{" "}
       </div>
       <div className=" text-white font-thin h-auto md:flex hidden  ">
-        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center ">
+        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
+        onClick={() => setOutProfile() }
+        >
           <HiHome className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
         <button
           className=" btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center"
-          onClick={handleSearchButtonClick}
+          onClick={handleSearch}
         >
           <FiSearch className="text-3xl text-white text-opacity-50  hover:text-opacity-90" />
         </button>
@@ -100,14 +145,18 @@ function NavBar() {
         >
           <IoCreateOutline className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
-        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center ">
-          <FaRegHeart className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
+        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
+        onClick={handleLikes}
+        >
+          <GoHeart className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
-        <button className=" h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center ">
+        <button className=" h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center "
+          onClick={handleProfile}
+        >
           <HiUser className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
       </div>
-      <div className="text-3xl text-white font-thin md:flex hidden ">
+      <div className="text-3xl text-white text-opacity-50 font-thin md:flex hidden ">
         {" "}
         <div className="dropdown dropdown-end ">
           <div tabIndex={0} role="button">

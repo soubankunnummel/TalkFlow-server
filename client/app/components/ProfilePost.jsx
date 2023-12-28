@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { MdAddCircle } from 'react-icons/md'
 import Like from './Like'
@@ -6,9 +7,24 @@ import Coment from './Coment'
 import Repost from './Repost'
 import Share from './Share'
 import Loading from './Loading'
+import usePosts from '../zustand/posts/posts'
 
 function ProfilePost() {
-    const [loading, setLoading] = useState(true);
+  
+  const {post} = usePosts()
+
+  const [loading, setLoading] = useState(false);
+  
+  // useEffect(() => {
+  //    fetch()
+  // })
+
+    if(post.length===0){
+      setLoading(true)
+    }
+    console.log(post)
+
+    
   return (
     <>
        {loading ? (

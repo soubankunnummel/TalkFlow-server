@@ -4,6 +4,7 @@ import { FaInstagram } from "react-icons/fa6";
 import Threads from "@/app/components/Threads";
 import Replies from "@/app/components/Replies";
 import Reposts from "@/app/components/Reposts";
+import ProfilePost from "@/app/components/ProfilePost";
 
 function Profile() {
   return (
@@ -106,6 +107,9 @@ function Profile() {
           
 
       </div>
+      <ProfilePost/>
+
+      
     </>
   );
 }

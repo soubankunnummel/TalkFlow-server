@@ -6,9 +6,10 @@ import {v2 as cloudinary} from 'cloudinary';
 import randomstring from 'randomstring'
 import nodemailer from 'nodemailer'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+import Post from '../models/postModel.js';
 // import passport, { use } from 'passport';
 
-// To see users profile
+// To see users profile 
 
     const getUserProfile = async (req, res) => {
         const {username} = req.params
@@ -17,7 +18,19 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
             if(!user)return res.status(404).json({message:"user not fount"})
 
-            res.status(200).json(user)
+            const posts = await Post.find({ userId: user.postedBy });
+
+            const userProfileWithPosts = {
+                user: {
+                  _id: user._id,
+                  username: user.username,
+                    post: user.text
+
+                },
+                posts: posts,
+              };
+
+            res.status(200).json({user:user, userProfileWithPosts:userProfileWithPosts})
         } catch (error) {
 
         res.status(500).json({ error: error.message });
@@ -365,10 +378,32 @@ const resetPassword = async (req, res) => {
 //         console.error('Error in loginWithGoogle ', error.message); 
 //     }
 // };
+
+
+// get logind user 
+
+const getUser = async (req, res) => {
+    try {
+        const userId = req.user._id;
+        console.log(userId)
+        const user = await User.findById(userId)
+        
+        if(!user)return res.status(404).json({message:"User not found"})
+        
+        res.status(200).json(user)
+        
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        console.error('Error in getUser ', error.message); 
+        
+    }
+    }
+
+
     export  {
                 signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser,
                 getUserProfile, allUsers, googleLogin,fogotPassword,resetPassword,
-                validateOTP
+                validateOTP,getUser
 
             
             }
