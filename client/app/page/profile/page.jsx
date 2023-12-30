@@ -5,11 +5,15 @@ import Threads from "@/app/components/Threads";
 import Replies from "@/app/components/Replies";
 import Reposts from "@/app/components/Reposts";
 import ProfilePost from "@/app/components/ProfilePost";
+import RepliPost from "@/app/components/ProfileRepliPost";
+import usePosts from "@/app/zustand/posts/posts";
+import ProfilRepos from "@/app/components/ProfilRepos";
 
 function Profile() {
+  const {selected } = usePosts()
   return (
     <>
-      <div className="w-full md:w-[580px] h-full  md:p-2 p-3 flex flex-col  justify-between items-center mb-10 ">
+      <div className="w-full md:w-[580px] h-full  md:p-2 p-3 flex flex-col  justify-between items-center   ">
         <div className="h-auto w-full flex justify-between   p-2">
           <div className=" w-1/2 h-auto flex flex-col justify-start">
             <span>souban</span>
@@ -40,7 +44,7 @@ function Profile() {
                   backgroundSize: "contain",
                 }}
               ></div>
-              <span className="mt-4 text-white text-opacity-20 ms-5">
+              <span className="mt-4 text-white text-opacity-20 ms-5 hover:underline">
                 {" "}
                 133 follower
               </span>
@@ -60,54 +64,25 @@ function Profile() {
             </div>
           </div>
 
-          {/* <div className="h-ful w-fit">
-              <div className="w-fit h-full  flex flex-col items-center gap-3">
-              <div
-            className="h-10 w-10 rounded-full bg-white box-border "
-            style={{
-              backgroundImage:
-                "url('https://img.freepik.com/free-photo/people-holding-wechat-icon_53876-63371.jpg?size=626&ext=jpg&ga=GA1.1.1677573732.1702106196&semt=ais')",
-              backgroundSize: "contain",
-            }}
-            >
-           
-            <button className=" relative top-5 left-5  ">
-              <MdAddCircle className="text-2xl hover:inset-5 " />
-            </button>
-
-          </div>
-            <div className="h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg"></div>
-              </div>
-            </div> */}
-          {/* <div className="w-full h-full bg-black flex flex-col">
-                <div className="w-full flex m-3 justify-between gap-3 items-center">
-                  <span className="font-medium text-white">souban</span>
-                  <div className="flex justify-between gap-3 items-center ">
-                    
-                  <span className="text-xs text-opacity-40 text-white">14 h</span>
-
-                <button >
-
-                <IoIosMore className="text-white"/>
-                </button>
-                </div>
-                  </div>
-                <div className="h-[400px] w-full bg-white m-2"></div>
-                 </div> */}
+         
         </div>
-        <button className="w-full h-9 bg-transparent border border-solid text-center rounded-md mt-3">
+        <button className="w-full h-10 bg-transparent border border-opacity-20 border-white text-center rounded-md mt-3">
           Edit Profile
         </button>
-          <div className="w-full h-9 bg-white flex justify-between items-center text-black text-center mt-2 p-3">
+          <div className="w-full h-full  flex justify-evenly items-center  text-white text-center mt-2 p-3">
                  <Threads/>
                  <Replies/>
                  <Reposts/>
                  
-          </div>
+          </div> 
           
 
       </div>
-      <ProfilePost/>
+    
+      {selected === 'repliPost'  && <RepliPost/>}
+      {selected === 'repost' && <ProfilRepos/> }
+      {!selected && <ProfilePost/>}
+     
 
       
     </>

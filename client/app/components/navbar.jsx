@@ -9,17 +9,17 @@ import { logoutUser } from "../service/auth";
 import { CgMoreO } from "react-icons/cg";
 import useProfile from "../zustand/posts/profilePost";
 import { GoHeart } from "react-icons/go";
-import { gerUserProfile, getUsr } from "../service/users";
+import { getPostuser, getProfielPost, getUsr } from "../service/users";
 import usePosts from "../zustand/posts/posts";
 
 
 
 function NavBar() {
-  const storePost = usePosts()
+  const {setPost, serUser} = usePosts()
   let username 
-  const { setProfile, setOutProfile, setSearch, setOutSearch, setLikes, setOutLikes } = useProfile();
+  const { setProfile, setOutProfile, setSearch, setLikes, } = useProfile();
 
-  useEffect(() => {
+  useEffect(() => { 
     getUser()
   },[])
 
@@ -42,16 +42,17 @@ function NavBar() {
   
   const handleProfile = async () => {
     try {
-      const response = await gerUserProfile(username)
-      console.log(response)
-      if(response){
-        storePost.setPost(response)
+      const response = await getProfielPost(username)
+      const user = await getPostuser(username)
+      
+      if(response|| user){
+        setPost(response)
+        serUser(user)
+
       }
     } catch (error) {
       console.log(error)
     }
-    
-   
     setProfile()
 
   }

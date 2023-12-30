@@ -15,14 +15,15 @@ import Post from '../models/postModel.js';
         const {username} = req.params
         try {
             const user = await User.findOne({username}).select("-password").select("-updatedAt")
+            console.log(user._id)
 
             if(!user)return res.status(404).json({message:"user not fount"})
 
-            const posts = await Post.find({ userId: user.postedBy });
+            const posts = await Post.find({ postedBy: user.id });
 
             const userProfileWithPosts = {
                 user: {
-                  _id: user._id,
+                  _id: user._id,    
                   username: user.username,
                     post: user.text
 
@@ -30,7 +31,7 @@ import Post from '../models/postModel.js';
                 posts: posts,
               };
 
-            res.status(200).json({user:user, userProfileWithPosts:userProfileWithPosts})
+            res.status(200).json(userProfileWithPosts)
         } catch (error) {
 
         res.status(500).json({ error: error.message });

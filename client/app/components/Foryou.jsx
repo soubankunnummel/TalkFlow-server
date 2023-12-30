@@ -7,7 +7,7 @@ function ForYou({ isActive, setActiveComponent }) {
   const {setFeed}=useFolloPost()
   useEffect(() => {
     handlForYou();
-  }, [])
+  }, []) 
 
   const handlForYou = async () => {
     if (!isActive) {

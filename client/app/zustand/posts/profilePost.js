@@ -1,7 +1,7 @@
 import create from 'zustand'
 
 const useProfile = create((set) => ({
-    profile: false,
+    profile: false, 
     setProfile: () => set({ profile: true, selected: "profile" }),
     setOutProfile: () => set({ profile: false, selected: null }),
     search: false,

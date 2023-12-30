@@ -39,5 +39,5 @@ export const gePostbyId = async () => {
         console.log("Error in get PostBy id",error.message)
         
     }
-}
+} 
 

@@ -5,7 +5,7 @@ import { IoIosMore } from "react-icons/io";
 import PostHead from "./PostHead";
 import { useEffect, useState } from "react";
 import { getPost } from "../service/post";
-import Loading from "./Loading"; 
+import Loading from "./Loading";
 import Like from "./Like";
 import Coment from "./Coment";
 import Share from "./Share";
@@ -13,12 +13,27 @@ import Repost from "./Repost";
 import FollowPost from "./FollowPost";
 import useFolloPost from "../zustand/posts/followPost";
 import ForuFollow from "./ForuFollow";
+import UserModal from "./UserModal";
 // import { useDispatch, useSelector } from "react-redux";
 // import postsSlice, { setPost } from "../Redux/store/posts/postsSlice";
 
 const Post = () => {
   const { feed } = useFolloPost();
   const [post, setPost] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    username: 'exampleUser',
+    followersCount: 1000, // Replace with the actual followers count
+  });
+
+  const handleMouseEnter = () => {
+    setShowModal(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowModal(false);
+  };
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -64,23 +79,54 @@ const Post = () => {
                           }}
                         >
                           <button className=" relative top-5 left-5  ">
-                            <MdAddCircle className="text-2xl hover:inset-5 " />
+                            <MdAddCircle className="text-2xl hover:scale-110 " />
                           </button>
                         </div>
                         <div className="  h-fit md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg"></div>
+
+                        <div className="w-10 h-10 relative flex justify-center">
+                          {item.replies.slice(0, 3).map((reply, index) => (
+                            <div
+                              key={index}
+                              className={`w-${5 - index} h-${
+                                5 - index
+                              } bg-black absolute ${
+                                index === 0
+                                  ? "top-0 right-0"
+                                  : index === 1
+                                  ? "top-2 left-1"
+                                  : "bottom-1 left-4"
+                              } rounded-full`}
+                              style={{
+                                backgroundImage: `url(${reply.userProfilePic})`,
+                                backgroundSize: "cover",
+                              }}
+                            ></div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                     <div className=" w-full h-full bg-black flex flex-col">
                       <div className="w-full flex m-3 justify-between gap-3 items-center">
-                        <span className="font-medium text-white hover:underline">
+                        <span className="font-medium text-white hover:underline"
+                         onMouseEnter={handleMouseEnter}
+                         onMouseLeave={handleMouseLeave}
+                        >
                           {item.postedBy.username}{" "}
                         </span>
+                        {showModal && (
+        <UserModal
+          username={userInfo.username}
+          followersCount={userInfo.followersCount}
+          onClose={handleMouseLeave}
+        />
+      )}
                         <div className="flex justify-between gap-3 items-center ">
                           <span className="text-xs text-opacity-40 text-white">
                             14 h
                           </span>
 
-                          <button>
+                          <button className=" w-7 h-7 rounded-full hover:bg-stone-900 active:scale-[90%] flex justify-center items-center">
                             <IoIosMore className="text-white" />
                           </button>
                         </div>
@@ -97,6 +143,10 @@ const Post = () => {
                       </div>
                       <div className="flex gap-1 mx-2 mt-10 items-center">
                         <Like /> <Coment /> <Repost /> <Share />
+                      </div>
+                      <div className="w-auto h-3 text-white text-opacity-20 gap-2 flex ms-3">
+                        <span>{item.replies.length} replies .</span>
+                        <span>{item.likes.length} likes</span>
                       </div>
                     </div>
                   </div>
