@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { MdOutlineSort } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
@@ -11,63 +11,64 @@ import useProfile from "../zustand/posts/profilePost";
 import { GoHeart } from "react-icons/go";
 import { getPostuser, getProfielPost, getUsr } from "../service/users";
 import usePosts from "../zustand/posts/posts";
-
-
-
+import { IoImagesOutline } from "react-icons/io5";
 function NavBar() {
-  const {setPost, serUser} = usePosts()
-  let username 
-  const { setProfile, setOutProfile, setSearch, setLikes, } = useProfile();
+  const fileInputRef = useRef(null);
+  const { setPost, serUser } = usePosts();
+  let username;
+  const { setProfile, setOutProfile, setSearch, setLikes } = useProfile();
 
-  useEffect(() => { 
-    getUser()
-  },[])
+  useEffect(() => {
+    getUser();
+  }, []);
+
+  const handleCreatePost = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
 
   const getUser = async () => {
     try {
-      const response = await getUsr()
-      console.log(response.username)
-      if(response) {
-        username = response.username
+      const response = await getUsr();
+      console.log(response.username);
+      if (response) {
+        username = response.username;
       }
     } catch (error) {
-      console.log("Error in nave bar")
+      console.log("Error in nave bar");
     }
-  }
+  };
   const router = useRouter();
-  
+
   const handleSearch = async () => {
-    setSearch()
-  }
-  
+    setSearch();
+  };
+
   const handleProfile = async () => {
     try {
-      const response = await getProfielPost(username)
-      const user = await getPostuser(username)
-      
-      if(response|| user){
-        setPost(response)
-        serUser(user)
+      const response = await getProfielPost(username);
+      const user = await getPostuser(username);
 
+      if (response || user) {
+        setPost(response);
+        serUser(user);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-    setProfile()
-
-  }
+    setProfile();
+  };
 
   const handleLikes = () => {
-    setLikes()
-  }
+    setLikes();
+  };
 
-  
- 
   // logout
 
   const handleLogout = async () => {
     try {
-      const response = await logoutUser(); 
+      const response = await logoutUser();
       if (response) {
         alert("Logged out");
         router.push("/page/login");
@@ -79,8 +80,8 @@ function NavBar() {
 
   // creat post
 
-  const  handleCreatPost = async () => {
-     document.getElementById("my_modal_2").showModal()
+  const handleCreatPost = async () => {
+    document.getElementById("my_modal_2").showModal();
   };
 
   return (
@@ -101,8 +102,9 @@ function NavBar() {
         ></div>{" "}
       </div>
       <div className=" text-white font-thin h-auto md:flex hidden  ">
-        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
-        onClick={() => setOutProfile() }
+        <button
+          className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
+          onClick={() => setOutProfile()}
         >
           <HiHome className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
@@ -113,31 +115,55 @@ function NavBar() {
           <FiSearch className="text-3xl text-white text-opacity-50  hover:text-opacity-90" />
         </button>
 
-        <dialog id="my_modal_2" className="modal flex justify-center ">
+        <dialog id="my_modal_2" className="modal">
           <div className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
             <div className="w-full h-5 bg-transparent flex justify-evenly text-white my-2 ">
-              <div className="w-3/4 text-center text-md font-bold">New thread</div>
+              <div className="w-3/4 text-center text-md font-bold">
+                New thread
+              </div>
               <div className="w-auto items-end mt-[1.5px]">
-                <CgMoreO/>
+                <CgMoreO />
               </div>
             </div>
             <div className="w-full h-[400px] bg-stone-900  rounded-3xl">
-            <div className="w-full h-8 bg-blue-500 flex justify-start  my-4 mx-3">
+              <div className="w-auto h-auto  flex justify-start  my-4 mx-3">
+                <div className="h-[100px] w-8  flex justify-center flex-col gap-1 ms-2 ">
+                  <div className="w-8 h-8 rounded-full bg-white"></div>
+                  <div className="h-8 w-[1px] bg-opacity-20 bg-white ms-4   "></div>
+                  <div className="w-3 h-3 rounded-full bg-white ms-[9px] "></div>
+                </div>
+                <div className="w-auto h-auto flex justify-start items-start flex-col ms-3 mt-3 relative">
+                  <span className=""> user name</span>
+                  <input
+                    type="text"
+                    name="text"
+                    placeholder="Start a thead..."
+                    id=""
+                    className="border-none outline-none bg-transparent"
+                  />
+                  <button
+                    className="btn h-auto px-2 py-3 bg-transparent border-none rounded-lg flex flex-col justify-center items-center"
+                    onClick={handleCreatePost}
+                  >
+                    <IoImagesOutline className="text-lg text-white text-opacity-50 hover:text-opacity-90" />
+                  </button>
+                  <input
+                    type="file"
+                    name="file"
+                    id="fileInput"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={(e) => handleFileChange(e)}
+                  />
+                </div>
 
-            <div className="h-20 w-8 bg-red-600 flex justify-center flex-col gap-1 "> 
-            <div className="w-7 h-7 rounded-full bg-white"></div>
-            <div className="h-5 w-[1px] bg-opacity-20 bg-white ms-3 "> </div>
+                <div className="absolute   "></div>
+              </div>
             </div>
-            <div className="w-full h-auto bg-yellow-600">user name</div>
-            </div>
-
-            </div>
-            
-          
           </div>
-          <form method="dialog">
-      <button className="btn btn-sm btn-circle btn-ghost absolute left-[820px] top-[210px]">✕</button>
-    </form>
+          <form method="dialog" className="modal-backdrop">
+            <button>close</button>
+          </form>
         </dialog>
 
         <button
@@ -146,12 +172,14 @@ function NavBar() {
         >
           <IoCreateOutline className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
-        <button className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
-        onClick={handleLikes}
+        <button
+          className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
+          onClick={handleLikes}
         >
           <GoHeart className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
-        <button className=" h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center "
+        <button
+          className=" h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center "
           onClick={handleProfile}
         >
           <HiUser className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
@@ -172,7 +200,7 @@ function NavBar() {
               <a>Item 1</a>
             </li>
             <li>
-              <a>Item 2</a> 
+              <a>Item 2</a>
             </li>
             <li>
               <a onClick={handleLogout}>Log out</a>
