@@ -13,9 +13,9 @@ function ProfilePost() {
   const [loading, setLoading] = useState(false);
   const { post, user } = usePosts();
 
-  if (!post) {
-     return setLoading(true);
-  }
+  useEffect(() => { 
+    setLoading(post.length === 0);
+  }, [post]);
 
   return (
     <>
@@ -69,7 +69,7 @@ function ProfilePost() {
                         backgroundSize: "contain",
                       }}></div>
                     </div>
-                    
+
                   </div>
                 </div>
                 <div className=" w-full h-full bg-black flex flex-col">

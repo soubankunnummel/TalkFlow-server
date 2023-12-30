@@ -14,25 +14,23 @@ import FollowPost from "./FollowPost";
 import useFolloPost from "../zustand/posts/followPost";
 import ForuFollow from "./ForuFollow";
 import UserModal from "./UserModal";
-// import { useDispatch, useSelector } from "react-redux";
-// import postsSlice, { setPost } from "../Redux/store/posts/postsSlice";
 
 const Post = () => {
   const { feed } = useFolloPost();
   const [post, setPost] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [userInfo, setUserInfo] = useState({
-    username: 'exampleUser',
-    followersCount: 1000, // Replace with the actual followers count
-  });
+  console.log("posts",post)
+  // const [userInfo, setUserInfo] = useState({
+  //   username: 'username',
+  //   followersCount: 1000, 
+  // });
 
-  const handleMouseEnter = () => {
-    setShowModal(true);
-  };
+  // const handleMouseEnter = () => {
+  //   setShowModal();
+  // };
 
-  const handleMouseLeave = () => {
-    setShowModal(false);
-  };
+  // const handleMouseLeave = () => {
+  //   setOutShowModal();
+  // };
 
   const [loading, setLoading] = useState(true);
 
@@ -61,10 +59,10 @@ const Post = () => {
           <PostHead />
           {!feed ? (
             <>
-              {post.map((item) => (
+              {post.map((item,index) => (
                 <div
                   className=" w-full md:w-[580px] h-auto  md:p-2 p-3 flex flex-col  justify-between items-center mb-10 "
-                  key={item._id}
+                  key={index}
                 >
                   <div className="h-auto w-full bg-black border-t-[1px] border-white flex border-opacity-30 p-2">
                     <div className="h-ful w-fit">
@@ -108,19 +106,23 @@ const Post = () => {
                     </div>
                     <div className=" w-full h-full bg-black flex flex-col">
                       <div className="w-full flex m-3 justify-between gap-3 items-center">
-                        <span className="font-medium text-white hover:underline"
-                         onMouseEnter={handleMouseEnter}
-                         onMouseLeave={handleMouseLeave}
+                        <span
+                          className="font-medium text-white hover:underline"
+                          // onMouseEnter={handleMouseEnter}
+                          // onMouseLeave={handleMouseLeave}
                         >
                           {item.postedBy.username}{" "}
                         </span>
-                        {showModal && (
-        <UserModal
-          username={userInfo.username}
-          followersCount={userInfo.followersCount}
-          onClose={handleMouseLeave}
-        />
-      )}
+                        {/* {showModal && (
+                        
+                            <UserModal
+                           
+                              username={item.postedBy.username}
+                              followersCount={userInfo.followersCount}
+                              onClose={handleMouseLeave}
+                            /> 
+                          
+                        )} */}
                         <div className="flex justify-between gap-3 items-center ">
                           <span className="text-xs text-opacity-40 text-white">
                             14 h

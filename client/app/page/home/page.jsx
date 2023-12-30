@@ -4,9 +4,8 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Profile from "../profile/page";
 import useProfile from "@/app/zustand/posts/profilePost";
-// import useSearch from "@/app/zustand/posts/searchUser";
 import Search from "@/app/components/Search";
-import Likes from "@/app/components/Likes";
+import Activity from "@/app/components/Activity";
   
 
 function Home() {
@@ -22,7 +21,7 @@ function Home() {
 
      {selected === "profile" && <Profile />}
       {selected === "search" && <Search />}
-      {selected === "likes" && <Likes />}
+      {selected === "likes" && <Activity />}
       {!selected && <Post />}
       
    
