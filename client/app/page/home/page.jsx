@@ -22,6 +22,7 @@ function Home() {
      {selected === "profile" && <Profile />}
       {selected === "search" && <Search />}
       {selected === "likes" && <Activity />}
+      
       {!selected && <Post />}
       
    

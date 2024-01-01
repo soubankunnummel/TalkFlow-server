@@ -5,7 +5,7 @@ import { MdAddCircle } from "react-icons/md";
 import Like from "./Like";
 import Coment from "./Coment";
 import Repost from "./Repost";
-import Share from "./Share";
+import Share from "./Share"; 
 import Loading from "./Loading";
 import usePosts from "../zustand/posts/posts";
 

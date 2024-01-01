@@ -1,11 +1,11 @@
 import create from 'zustand'
 
-const useProfile = create((set) => ({
+const useProfile = create((set) => ({ 
     profile: false, 
     setProfile: () => set({ profile: true, selected: "profile" }),
     setOutProfile: () => set({ profile: false, selected: null }),
     search: false,
-    setSearch: () => set({ search: true, selected: "search" }),
+    setSearch: () => set({ search: true, selected: "search" }), 
     setOutSearch: () => set({ search: false, selected: null }),
     likes: false,
     setLikes: () => set({ likes: true, selected: "likes" }),

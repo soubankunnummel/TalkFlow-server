@@ -15,7 +15,7 @@ import Post from '../models/postModel.js';
         const {username} = req.params
         try {
             const user = await User.findOne({username}).select("-password").select("-updatedAt")
-            console.log(user._id)
+           
 
             if(!user)return res.status(404).json({message:"user not fount"})
 
@@ -202,7 +202,7 @@ const signupUser = async (req, res) => {
 
     const allUsers = async (req, res) => {
         try {
-            const users = User.find()
+            const users = await User.find()
             if(!users) return res.status(404).json({message:"Users Not Fount"})
             res.status(200).json({Users:users})
         } catch (error) {
@@ -386,7 +386,7 @@ const resetPassword = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const userId = req.user._id;
-        console.log(userId)
+        
         const user = await User.findById(userId)
         
         if(!user)return res.status(404).json({message:"User not found"})

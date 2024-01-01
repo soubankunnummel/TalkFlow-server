@@ -41,3 +41,17 @@ export const gePostbyId = async () => {
     }
 } 
 
+/// create post 
+
+    export const createPost = async (postedBy,text,img) => {
+
+        try {
+            const response = await Axios.post(`/api/posts/create`,{postedBy,text,img})
+            if(response.status === 201){
+                return response.data
+            }
+        } catch (error) {
+            console.log("Error in create Post")
+        }
+    }
+

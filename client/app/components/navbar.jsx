@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useId, useRef } from "react";
 import { MdOutlineSort } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
@@ -12,28 +12,37 @@ import { GoHeart } from "react-icons/go";
 import { getPostuser, getProfielPost, getUsr } from "../service/users";
 import usePosts from "../zustand/posts/posts";
 import { IoImagesOutline } from "react-icons/io5";
+import usePostsStroe from "../zustand/posts/postStroe";
+import { createPost } from "../service/post";
+import { useForm } from 'react-hook-form';
+
+
+var username;
+let userId
 function NavBar() {
+  
   const fileInputRef = useRef(null);
   const { setPost, serUser } = usePosts();
-  let username;
+  let {postedBy, setPostedBy, text, setText, img, setImg, resetState} = usePostsStroe()
   const { setProfile, setOutProfile, setSearch, setLikes } = useProfile();
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
+  const { handleSubmit, register, setValue } = useForm();
+  
+  
   const handleCreatePost = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
-
+  
   const getUser = async () => {
     try {
       const response = await getUsr();
-      console.log(response.username);
+      
+      console.log(response._id)
       if (response) {
         username = response.username;
+        userId = response._id
+        
       }
     } catch (error) {
       console.log("Error in nave bar");
@@ -44,6 +53,7 @@ function NavBar() {
   const handleSearch = async () => {
     setSearch();
   };
+
 
   const handleProfile = async () => {
     try {
@@ -78,11 +88,76 @@ function NavBar() {
     }
   };
 
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setImg(file);
+  // };
+
+  // const handlePostSubmit = async (e) => {
+  //   try {
+  //     e.preventDefault();
+      
+  //     setPostedBy(userId)
+
+  //     const formData = new FormData();
+  //     formData.append("postedBy", postedBy);
+  //     formData.append("text", text);
+  //     formData.append("file", img);
+    
+  //   console.log('postedBy:', postedBy);
+  //   console.log('text:', text);
+  //   console.log('img:', img);
+  //   console.log("formdata", formData)
+
+  //   const response = await createPost(postedBy,text,img)
+  //   if(response){
+  //     alert("Post created")
+  //   }
+    
+  // } catch (error) {
+  //   console.log(error)
+    
+  // }
+    
+   
+  
+  // };
+  const handleFileChange = (e) => {
+    setValue('img', e.target.files[0]);
+  };
+  
+  const handlePostSubmit = async (data) => {
+    try {
+      data.postedBy = userId;
+      
+      console.log('data:', data);
+  
+      const formData = new FormData();
+      formData.append("postedBy", data.postedBy);
+      formData.append("text", data.text);
+      formData.append("img", data.img);
+  
+      const response = await createPost(formData);
+      if (response) {
+        alert("Post created");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
+
+
   // creat post
 
   const handleCreatPost = async () => {
     document.getElementById("my_modal_2").showModal();
   };
+  
+  useEffect(() => {
+    getUser();
+    
+  }, [handleProfile]);
 
   return (
     <div
@@ -103,7 +178,7 @@ function NavBar() {
       </div>
       <div className=" text-white font-thin h-auto md:flex hidden  ">
         <button
-          className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
+          className="btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
           onClick={() => setOutProfile()}
         >
           <HiHome className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
@@ -116,7 +191,7 @@ function NavBar() {
         </button>
 
         <dialog id="my_modal_2" className="modal">
-          <div className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
+          <div  className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
             <div className="w-full h-5 bg-transparent flex justify-evenly text-white my-2 ">
               <div className="w-3/4 text-center text-md font-bold">
                 New thread
@@ -133,17 +208,19 @@ function NavBar() {
                   <div className="w-3 h-3 rounded-full bg-white ms-[9px] "></div>
                 </div>
                 <div className="w-auto h-auto flex justify-start items-start flex-col ms-3 mt-3 relative">
-                  <span className=""> user name</span>
+                  <span className="">{username} </span>
                   <input
                     type="text"
                     name="text"
                     placeholder="Start a thead..."
                     id=""
+                    onChange={(e) => setText(e.target.value)}
                     className="border-none outline-none bg-transparent"
                   />
                   <button
-                    className="btn h-auto px-2 py-3 bg-transparent border-none rounded-lg flex flex-col justify-center items-center"
+                    className=" h-auto px-2 py-3 bg-transparent border-none rounded-lg flex flex-col justify-center items-center"
                     onClick={handleCreatePost}
+                   
                   >
                     <IoImagesOutline className="text-lg text-white text-opacity-50 hover:text-opacity-90" />
                   </button>
@@ -157,8 +234,13 @@ function NavBar() {
                   />
                 </div>
 
-                <div className="absolute   "></div>
+                
               </div>
+              <div className="w-auto h-auto flex justify-end px-6">
+                  <button className="w-16 h-10 rounded-3xl bg-stone-800 text-black font-medium"type="submit"
+                   onClick={handleSubmit(handlePostSubmit)}
+                  >Post</button>
+                </div>
             </div>
           </div>
           <form method="dialog" className="modal-backdrop">
@@ -167,19 +249,19 @@ function NavBar() {
         </dialog>
 
         <button
-          className=" h-auto  py-n px-7 bg-transparent hover:bg-stone-800 border-none rounded-lg  flex flex-col justify-center items-center"
+          className="btn h-auto  py-n px-7 bg-transparent hover:bg-stone-800 border-none rounded-lg  flex flex-col justify-center items-center"
           onClick={handleCreatPost}
         >
           <IoCreateOutline className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
         <button
-          className=" h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
+          className="btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
           onClick={handleLikes}
         >
           <GoHeart className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
         <button
-          className=" h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center "
+          className="btn h-auto px-7  py-5 bg-transparent hover:bg-stone-800  rounded-lg flex border-none flex-col justify-center items-center "
           onClick={handleProfile}
         >
           <HiUser className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />

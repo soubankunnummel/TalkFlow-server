@@ -5,11 +5,11 @@ function Replies() {
    const {setRepliPost} = usePosts()
 
   const handleClick = async () => {
-    setRepliPost()
+    setRepliPost() 
     try { 
       
     } catch (error) {
-      
+       
     }
   }
   return (

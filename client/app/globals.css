@@ -38,7 +38,7 @@ body {
         rgba(0, 0, 0, 0.5) 5px 10px 15px;
         z-index: 2;
         position: fixed;
-        bottom: 5px;
+        bottom: 1px;
         left: 50%;  
   transform: translateX(-50%); 
 }
@@ -48,4 +48,45 @@ body {
   }
   
   
+}
+/* WebKit (Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Set the width of the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--foreground-rgb); /* Set the color of the scrollbar thumb */
+  border-radius: 5px; /* Set the border-radius for a rounded thumb */
+}
+
+::-webkit-scrollbar-track {
+  background-color: rgb(var(--background-end-rgb)); /* Set the color of the scrollbar track */
+}
+
+/* Firefox */
+body {
+  scrollbar-color: var(--foreground-rgb) rgb(var(--background-end-rgb));
+}
+
+/* Optional: Set the width of the scrollbar in Firefox */
+body {
+  scrollbar-width: thin;
+}
+
+/* Optional: Set the color of the scrollbar corner in Firefox */
+body {
+  scrollbar-face-color: rgb(var(--background-end-rgb));
+}
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
 }

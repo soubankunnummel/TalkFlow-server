@@ -18,7 +18,9 @@ import UserModal from "./UserModal";
 const Post = () => {
   const { feed } = useFolloPost();
   const [post, setPost] = useState([]);
-  console.log("posts",post)
+  // console.log("posts",post)
+
+  // user modal setap
   // const [userInfo, setUserInfo] = useState({
   //   username: 'username',
   //   followersCount: 1000, 
@@ -65,22 +67,23 @@ const Post = () => {
                   key={index}
                 >
                   <div className="h-auto w-full bg-black border-t-[1px] border-white flex border-opacity-30 p-2">
-                    <div className="h-ful w-fit">
+                    <div className="h-auto  w-fit">
                       <div className="w-fit h-full  flex flex-col items-center gap-3">
                         <div
                           className="h-10 w-10 rounded-full bg-white box-border "
                           style={{
-                            backgroundImage: `url(${item.postedBy.profilePic})`,
+                            backgroundImage: `url(${item.postedBy.profilePic ?  item.postedBy.profilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"})`,
                             backgroundSize: "cover",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center",
                           }}
+                        
                         >
                           <button className=" relative top-5 left-5  ">
                             <MdAddCircle className="text-2xl hover:scale-110 " />
                           </button>
                         </div>
-                        <div className="  h-fit md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg"></div>
+                        <div  className={` md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg cross-line `}></div>
 
                         <div className="w-10 h-10 relative flex justify-center">
                           {item.replies.slice(0, 3).map((reply, index) => (

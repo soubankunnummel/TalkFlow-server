@@ -26,13 +26,16 @@ cloudinary.config({
  })
 
  const imageUpload = (fieldname) => async (req, res, next) => {
-     
+     console.log("requsets",req.body)   
      upload.single(fieldname)(req, res, async (err) => {
          if (err) {
              return res.status(400).json({ error: err.message });
             }
             try {
               
+                if (!req.file) {
+                    return res.status(400).json({ error: "File not provided" });
+                }
                 
                 console.log(req.file);
             const result = await cloudinary.uploader.upload(req.file.path, {
@@ -45,7 +48,7 @@ cloudinary.config({
             fs.unlink(req.file.path, (unliker) => {
                 if (unliker) {
                     console.log("Error deleting local file", unliker);
-                }
+                }  
             });
 
             next();

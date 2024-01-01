@@ -1,13 +1,13 @@
 import create from 'zustand'
 
 const usePosts = create ((set) => ({
-    post: [],
+    post: [], 
     user:'',
     
     setPost: (postData) => set({ post: postData }),
     serUser: (postUser) => set({ user: postUser}),
 
-    repliPost:false,
+    repliPost:false, 
     setRepliPost: () => set({repliPost: true, selected:"repliPost"}),
     setOutRepliPost: () => set({repliPost: false, selected:null}),
 
@@ -20,4 +20,4 @@ const usePosts = create ((set) => ({
 
 }))
 
-export default usePosts  
+export default usePosts   

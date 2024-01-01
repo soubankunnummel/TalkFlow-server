@@ -2,7 +2,7 @@ import { IoIosMore } from "react-icons/io";
 import { MdAddCircle } from "react-icons/md";
 import { FaInstagram } from "react-icons/fa6";
 import Threads from "@/app/components/Threads";
-import Replies from "@/app/components/Replies";
+import Replies from "@/app/components/Replies"; 
 import Reposts from "@/app/components/Reposts";
 import ProfilePost from "@/app/components/ProfilePost";
 import RepliPost from "@/app/components/ProfileRepliPost";
@@ -10,7 +10,7 @@ import usePosts from "@/app/zustand/posts/posts";
 import ProfilRepos from "@/app/components/ProfilRepos";
 
 function Profile() {
-  const {selected } = usePosts()
+  const {selected } = usePosts()  
   return (
     <>
       <div className="w-full md:w-[580px] h-full  md:p-2 p-3 flex flex-col  justify-between items-center   ">

@@ -1,14 +1,14 @@
 import React from 'react'
 import usePosts from '../zustand/posts/posts'
 
-function Threads() {
+function Threads() { 
   const {setOutRepliPost} = usePosts()
 
-  const handleClick = async () => {
+  const handleClick = async () => { 
     try {
       setOutRepliPost()
     } catch (error) {
-      
+       
     }
   }
   return (

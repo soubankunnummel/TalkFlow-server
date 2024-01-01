@@ -6,7 +6,8 @@ import User from "../models/userModel.js"
 
 const createPost = async (req, res) => {
     try {
-        const { postedBy, text, img } = req.body;
+        const { postedBy, text, img } = req.body; 
+        console.log("reqbody:", postedBy,text,img) 
 
         if (!postedBy || !text) {
             return res.status(400).json({ message: "PostedBy and text field are required" });

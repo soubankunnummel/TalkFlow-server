@@ -6,11 +6,11 @@ import User from "../models/userModel.js";
         try {
             // const token = req.cookies.jwt
             const token = req.headers["authorization"]
-            console.log("token form protect route :",token)
+            // console.log("token form protect route :",token)
             if(!token)return res.status(401).json({message:"Unauthorized"})
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET)  
-            console.log("user id from decoded",decoded)
+            // console.log("user id from decoded",decoded)
             const user = await User.findById(decoded.userId).select("-password")
 
             // console.log("user form protect rout",user)
