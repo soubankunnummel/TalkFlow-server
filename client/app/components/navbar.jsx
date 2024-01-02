@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useId, useRef } from "react";
-import { MdOutlineSort } from "react-icons/md";
+import { MdOutlineSort } from "react-icons/md"; 
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { HiHome, HiUser } from "react-icons/hi2";
@@ -23,9 +23,10 @@ function NavBar() {
   
   const fileInputRef = useRef(null);
   const { setPost, serUser } = usePosts();
-  let {postedBy, setPostedBy, text, setText, img, setImg, resetState} = usePostsStroe()
+  let {postedBy, setPostedBy, text, setText, image, setImage, resetState} = usePostsStroe()
   const { setProfile, setOutProfile, setSearch, setLikes } = useProfile();
-  const { handleSubmit, register, setValue } = useForm();
+  // const { handleSubmit, register, setValue } = useForm();
+  const router = useRouter();
   
   
   const handleCreatePost = () => {
@@ -38,7 +39,7 @@ function NavBar() {
     try {
       const response = await getUsr();
       
-      console.log(response._id)
+      console.log(response.username)
       if (response) {
         username = response.username;
         userId = response._id
@@ -48,7 +49,6 @@ function NavBar() {
       console.log("Error in nave bar");
     }
   };
-  const router = useRouter();
 
   const handleSearch = async () => {
     setSearch();
@@ -88,63 +88,55 @@ function NavBar() {
     }
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setImg(file);
-  // };
+  const handleFileChange = (e) => { 
+    // const file = e.target.files[0];
+    // setImage(file);
+    setImage(e.target.files[0])
+  }
 
-  // const handlePostSubmit = async (e) => {
-  //   try {
-  //     e.preventDefault();
-      
-  //     setPostedBy(userId)
-
-  //     const formData = new FormData();
-  //     formData.append("postedBy", postedBy);
-  //     formData.append("text", text);
-  //     formData.append("file", img);
-    
-  //   console.log('postedBy:', postedBy);
-  //   console.log('text:', text);
-  //   console.log('img:', img);
-  //   console.log("formdata", formData)
-
-  //   const response = await createPost(postedBy,text,img)
-  //   if(response){
-  //     alert("Post created")
-  //   }
-    
-  // } catch (error) {
-  //   console.log(error)
-    
-  // }
-    
-   
-  
-  // };
-  const handleFileChange = (e) => {
-    setValue('img', e.target.files[0]);
-  };
-  
-  const handlePostSubmit = async (data) => {
+  const handlePostSubmit = async (e) => {
     try {
-      data.postedBy = userId;
-      
-      console.log('data:', data);
+      e.preventDefault();
   
-      const formData = new FormData();
-      formData.append("postedBy", data.postedBy);
-      formData.append("text", data.text);
-      formData.append("img", data.img);
+      setPostedBy(userId);
   
-      const response = await createPost(formData);
+      console.log('postedBy:', postedBy);
+      console.log('text:', text);
+      console.log('img:', image);
+  
+      const response = await createPost(postedBy, text, image || null);
       if (response) {
         alert("Post created");
+        resetState();
       }
     } catch (error) {
       console.log(error);
     }
   };
+  
+  // const handleFileChange = (e) => {
+  //   setValue('img', e.target.files[0]);
+  // };
+  
+  // const handlePostSubmit = async (data) => {
+  //   try {
+  //     data.postedBy = userId;
+      
+  //     console.log('data:', data);
+  
+  //     const formData = new FormData();
+  //     formData.append("postedBy", data.postedBy);
+  //     formData.append("text", data.text);
+  //     formData.append("img", data.img);
+  
+  //     const response = await createPost(formData);
+  //     if (response) {
+  //       alert("Post created");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   
 
 
@@ -155,9 +147,9 @@ function NavBar() {
   };
   
   useEffect(() => {
-    getUser();
+    getUser()
     
-  }, [handleProfile]);
+  }, []);
 
   return (
     <div
@@ -189,6 +181,8 @@ function NavBar() {
         >
           <FiSearch className="text-3xl text-white text-opacity-50  hover:text-opacity-90" />
         </button>
+
+
 
         <dialog id="my_modal_2" className="modal">
           <div  className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
@@ -238,7 +232,7 @@ function NavBar() {
               </div>
               <div className="w-auto h-auto flex justify-end px-6">
                   <button className="w-16 h-10 rounded-3xl bg-stone-800 text-black font-medium"type="submit"
-                   onClick={handleSubmit(handlePostSubmit)}
+                   onClick={handlePostSubmit}
                   >Post</button>
                 </div>
             </div>
@@ -247,6 +241,9 @@ function NavBar() {
             <button>close</button>
           </form>
         </dialog>
+
+
+
 
         <button
           className="btn h-auto  py-n px-7 bg-transparent hover:bg-stone-800 border-none rounded-lg  flex flex-col justify-center items-center"

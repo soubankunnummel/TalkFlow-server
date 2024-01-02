@@ -38,6 +38,31 @@ import Post from '../models/postModel.js';
         console.log("Error in get users profile: ", error.message);
         }
     }
+
+// get Profil with profile pic  
+
+    const getProfile = async (req, res) => {
+        const {username} = req.params
+        try {
+            const user = await User.findOne({username}).select("-password").select("-updatedAt").populate("followers")
+            const follow = await User.findOne({username}).select("-password").select("-updatedAt").populate("following")
+
+           const following =  follow.following
+        //    console.log(following)
+
+            if(!user)return res.status(404).json({message:"user not fount"})
+
+            
+
+            res.status(200).json({user, following })
+        } catch (error) {
+
+        res.status(500).json({ error: error.message });
+        console.log("Error in get users profile: ", error.message);
+        }
+    }
+
+
 // singup user
 
 const signupUser = async (req, res) => {
@@ -301,7 +326,7 @@ const validateOTP = async (req, res) => {
         }
 
         function isOtpExpired(otpGeneratedAt) {
-            const expirationTimeInMinutes = 15; // Adjust as needed
+            const expirationTimeInMinutes = 15; 
             const now = new Date();
             const otpGeneratedTime = new Date(otpGeneratedAt);
 
@@ -400,11 +425,31 @@ const getUser = async (req, res) => {
     }
     }
 
+// get followsers 
+
+    const getFollowers = async (req, res) => {
+        try {
+            const userId = req.user._id;
+            
+            const user = await User.findById(userId).populate("followers")
+            // console.log("user:-",user)
+            
+            if(!user)return res.status(404).json({message:"User not found"})
+            
+            res.status(200).json(user)
+            
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+            console.error('Error in getUser ', error.message); 
+            
+        }
+    }
+
 
     export  {
                 signupUser,loginUser, logoutUser, folloUnfollowUser, updateUser,
                 getUserProfile, allUsers, googleLogin,fogotPassword,resetPassword,
-                validateOTP,getUser
+                validateOTP,getUser, getFollowers, getProfile
 
             
             }

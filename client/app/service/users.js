@@ -24,7 +24,6 @@ import Axios from "./axios"
     export const getPostuser = async (username) => {
         try {
             const response = await Axios.get(`/api/users/profile/${username}`)
-            console.log(response.data)
             if(response.status === 200){
                 return response.data.user
             }
@@ -73,5 +72,36 @@ import Axios from "./axios"
         } catch (error) {
             console.log("Error in follow unfollo user")
             
+        }
+    }
+
+// followers only
+
+    export const followers = async () => {
+        try {
+            const response = await Axios.get(`/api/users/followers`)
+            if(response.status === 200){
+                return response.data.followers
+            }
+        } catch (error) {
+            console.log("Error in followers",error)
+        }
+    }
+
+// get user profile 
+
+    export const getProfile = async (username) => {
+        try {
+            const response = await Axios.get(`/api/users/user-profile/${username}`)
+            console.log('respons:' ,response.data)
+            if(response.status === 200) {
+
+                return response.data
+                // const following = response.data.following
+                // const user = response.data.user
+                // return {user:user,following:following}
+            }
+        } catch (error) {
+            console.log("Error in get User Profile ", error)
         }
     }

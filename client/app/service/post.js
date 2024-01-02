@@ -55,3 +55,20 @@ export const gePostbyId = async () => {
         }
     }
 
+// get replied posts  with reply
+
+    export const getRepliedPosts = async () => {
+        try {
+            const response = await Axios.post(`/api/posts/replies`)
+            console.log(response.data)
+            if(response.status === 200){
+                
+                return response.data.repliedPosts 
+            }
+        } catch (error) {
+            console.log("Error in replide post", error)
+        }
+    }
+
+
+

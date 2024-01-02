@@ -6,16 +6,16 @@ const usePostsStroe = create ((set) => ({
 
     postedBy: null,
     text    : null,
-    img     : null,
+    image     : null,
 
     setPostedBy: (postedBy) => set({postedBy}),
     setText    : (text) => set({text}),
-    setImg     : (img) => set({img}),
+    setImage     : (image) => set({image}),
 
     resetState : () => set({
         postedBy: null,
         text    : null, 
-        img     : null,
+        image     : null,
     })
 
 }))

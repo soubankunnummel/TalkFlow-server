@@ -36,7 +36,7 @@ const createPost = async (req, res) => {
         res.status(201).json({ message: "New post created", newPost});
     } catch (error) {
         res.status(500).json({ message: error.message });
-        console.log("Error in createPost: ", error.message);
+        console.log("Error in createPost: ", error.message); 
     }
 };
 
@@ -185,17 +185,27 @@ const createPost = async (req, res) => {
 const getRepliedPosts = async (req, res) => {
     try {
         const userId = req.user._id;
-        console.log(userId)
-
+        // console.log(userId)
     
-        const user = await User.findById(userId).populate('repliedPosts');
+        const user = await User.findById(userId).populate({
+            path: 'repliedPosts',
+            populate: {
+                path: 'replies',
+                select: '_id userId text userProfilePic username',
+            },
+        });
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        // console.log(user)
 
         const repliedPosts = user.repliedPosts;
-        res.status(200).json({ repliedPosts });
+
+        
+        // const replies  = user.repliedPosts.replies
+        console.log(user)
+        res.status(200).json( {repliedPosts} );
     } catch (error) {
         res.status(500).json({ message: error.message });
         console.log("Error in getRepliedPosts:", error.message);

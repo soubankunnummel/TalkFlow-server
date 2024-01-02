@@ -1,15 +1,20 @@
 import React from 'react'
 import usePosts from '../zustand/posts/posts'
+import { getRepliedPosts } from '../service/post'
 
 function Replies() {
-   const {setRepliPost} = usePosts()
+   const {setRepliPost, setRepliposts, setReplies} = usePosts()
 
   const handleClick = async () => {
     setRepliPost() 
-    try { 
-      
+    try {  
+      const response = await getRepliedPosts()
+     
+      if(response){
+        setRepliposts(response)
+      }
     } catch (error) {
-       
+       console.log(error)
     }
   }
   return (

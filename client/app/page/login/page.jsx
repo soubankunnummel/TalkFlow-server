@@ -31,7 +31,9 @@ function login() {
 
       if (response) {
         alert("Login successful");
-        router.push("/");
+        
+        router.refresh()
+        router.push("/")
       } else {
         alert("Invalid username or password");
       }

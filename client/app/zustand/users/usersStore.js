@@ -4,6 +4,9 @@
     user:[], 
     setUser: (userData) => set({user: userData}),
    
+    followerss:[],
+    setFollowerss: (userData) => set({followerss: userData}),
+
     all: true,
     setAll: () => set({all: true , selected: "all"}) ,
  

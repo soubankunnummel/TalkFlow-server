@@ -19,31 +19,31 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({storage})
-cloudinary.config({
+cloudinary.config({ 
     cloud_name:process.env.CLOUDINARY_NAME,
     api_key:process.env.CLOUDINARY_API,
     api_secret:process.env.CLOUDINARY_SECRET_KEY
  })
 
  const imageUpload = (fieldname) => async (req, res, next) => {
-     console.log("requsets",req.body)   
+    //  console.log("requsets",req.body)   
      upload.single(fieldname)(req, res, async (err) => {
          if (err) {
              return res.status(400).json({ error: err.message });
             }
             try {
               
-                if (!req.file) {
-                    return res.status(400).json({ error: "File not provided" });
-                }
+                // if (!req.file) {
+                //     return res.status(400).json({ error: "File not provided" });
+                // }
                 
                 console.log(req.file);
             const result = await cloudinary.uploader.upload(req.file.path, {
                 folder: "TalkFlow-users",
             });
 
-            console.log('working')
-            console.log("result in cloudinary middelware",result)
+            // console.log('working')
+            // console.log("result in cloudinary middelware",result)
             req.body[fieldname] = result.secure_url;
             fs.unlink(req.file.path, (unliker) => {
                 if (unliker) {

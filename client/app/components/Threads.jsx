@@ -7,6 +7,7 @@ function Threads() {
   const handleClick = async () => { 
     try {
       setOutRepliPost()
+      
     } catch (error) {
        
     }

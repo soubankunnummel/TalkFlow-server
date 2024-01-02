@@ -23,7 +23,7 @@ function Reposts() {
       </div> */}
 
       <div className="flex w-full justify-center items-center  text-white text-opacity-30 h-screen ">
-        <h1 className="flex justify-center items-center ">No replies yet</h1>
+        <h1 className="flex justify-center items-center ">No Reposts yet</h1>
       </div>
     </>
   );

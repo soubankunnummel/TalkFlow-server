@@ -7,6 +7,13 @@ const usePosts = create ((set) => ({
     setPost: (postData) => set({ post: postData }),
     serUser: (postUser) => set({ user: postUser}),
 
+
+    repliposts:[],
+    setRepliposts: (postData) => set({repliposts: postData}),
+
+    replies: [],
+    setReplies: (postData) => set({replies: postData}),
+
     repliPost:false, 
     setRepliPost: () => set({repliPost: true, selected:"repliPost"}),
     setOutRepliPost: () => set({repliPost: false, selected:null}),
