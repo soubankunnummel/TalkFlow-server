@@ -16,6 +16,7 @@ const storage = multer.diskStorage({
     destination: path.join(__dirname,'uploads'),
     filename:(req, file, cb) => {
         cb(null, Date.now() + file.originalname)
+        console.log("requsts:", req.body)
     }
 })
 const upload = multer({storage})
@@ -26,6 +27,7 @@ cloudinary.config({
  })
 
  const imageUpload = (fieldname) => async (req, res, next) => {
+
     //  console.log("requsets",req.body)   
      upload.single(fieldname)(req, res, async (err) => {
          if (err) {
@@ -33,9 +35,9 @@ cloudinary.config({
             }
             try {
               
-                // if (!req.file) {
-                //     return res.status(400).json({ error: "File not provided" });
-                // }
+                if (!req.file) {
+                    return res.status(400).json({ error: "File not provided" });
+                }
                 
                 console.log(req.file);
             const result = await cloudinary.uploader.upload(req.file.path, {

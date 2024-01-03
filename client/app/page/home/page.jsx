@@ -6,6 +6,7 @@ import Profile from "../profile/page";
 import useProfile from "@/app/zustand/posts/profilePost";
 import Search from "@/app/components/Search";
 import Activity from "@/app/components/Activity";
+import UserProfile from "../user/page";
   
 
 function Home() {
@@ -16,10 +17,11 @@ function Home() {
   
 
   return (
-    <div className=" w-full h-auto flex justify-center flex-col items-center">
+    <div className=" w-full h-auto flex justify-center flex-col items-center ">
      
 
      {selected === "profile" && <Profile />}
+     {selected === "userprofile" && <UserProfile/>}
       {selected === "search" && <Search />}
       {selected === "likes" && <Activity />}
       

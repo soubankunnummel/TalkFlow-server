@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { RiSearchLine } from "react-icons/ri";
-import { folloUnfollowUser, getAllUsers } from "../service/users";
+import { folloUnfollowUser, getAllUsers, getPostuser, getProfielPost, getProfile } from "../service/users";
 import Loading from "./Loading";
+import useProfileStore from "../zustand/users/profileStore";
+import usePosts from "../zustand/posts/posts";
+import useProfile from "../zustand/posts/profilePost";
 
 function Search() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [followStates, setFollowStates] = useState([]);
+  const {setProfile} = useProfileStore()
+  const {setUserProfil} = useProfile()
+  const { setPost, serUser, post } = usePosts();
   console.log(users);
 
   const getUsers = async () => {
@@ -22,6 +28,22 @@ function Search() {
       console.log(error);
     }
   };
+
+  const handleUser = async (username) => {
+    try {
+      const response = await getProfile(username)
+      const profilePost = await getProfielPost(username)
+      const postUser = await getPostuser(username)
+      if(response && profilePost && postUser){
+        await setProfile(response)
+        await serUser(postUser)
+        await setPost(profilePost)
+        await setUserProfil()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     getUsers();
@@ -93,7 +115,9 @@ function Search() {
                       />
                     </div>
                     <div className="w-auto h-auto flex flex-col ms-2">
-                      <span className="hover:underline mb-3 md:mb-0">
+                      <span className="hover:underline mb-3 md:mb-0"
+                      onClick={() => handleUser(user.username)}
+                      >
                         {user.username}{" "}
                       </span>
                       <span> {user.followers.length} followers</span>

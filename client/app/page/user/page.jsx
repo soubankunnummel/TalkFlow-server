@@ -12,40 +12,11 @@ import { useEffect } from "react";
 import useProfileStore from "@/app/zustand/users/profileStore";
 
 var username;
-var userId; 
-function Profile() {
+var userId;
+function UserProfile() {
   const { selected } = usePosts();
-  const { profile, setProfile } = useProfileStore();
-  console.log(profile.user && profile.user.name);
-  const getUser = async () => {
-    try {
-      const response = await getUsr();
+  const { profile } = useProfileStore();
 
-      console.log(response.username);
-      if (response) {
-        username = response.username;
-        userId = response._id; 
-        await fechData();
-      }
-    } catch (error) {
-      console.log("", error);
-    }
-  };
-
-  const fechData = async () => {
-    try {
-      const response = await getProfile(username);
-      console.log(response);
-      if (response) {
-        await setProfile(response);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    getUser();
-  }, []);
 
   return (
     <>
@@ -116,8 +87,9 @@ function Profile() {
 
       {selected === "repliPost" && <RepliPost />}
       {selected === "repost" && <ProfilRepos />}
+  
       {!selected && <ProfilePost />}
     </>
   );
 }
-export default Profile;
+export default UserProfile;

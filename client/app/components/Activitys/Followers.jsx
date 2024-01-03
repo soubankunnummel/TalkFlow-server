@@ -6,7 +6,7 @@ function Followers() {
   const {followerss} = usersStore()
   console.log(followerss)
 
-
+ 
   return (
     <>
       {followerss.length === 0 ? (

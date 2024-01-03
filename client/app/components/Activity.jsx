@@ -4,9 +4,9 @@ import All from "./ActivityBtns/BtnAll";
 import Allusers from "./Activitys/Allusers";
 import usersStore from "../zustand/users/usersStore";
 import BtnFollowers from "./ActivityBtns/BtnFollowers";
-import BtnReplies from "./ActivityBtns/BtnReplies";
+import BtnReplies from "./ActivityBtns/BtnReplies"; 
 import BtnMention from "./ActivityBtns/BtnMention";
-import BtnReposts from "./ActivityBtns/BtnReposts";
+import BtnReposts from "./ActivityBtns/BtnReposts"; 
 import Followers from "./Activitys/Followers";
 import ActivityReplies from "./Activitys/ActivityReplies";
 import Mention from "./Activitys/Mention";
@@ -22,7 +22,7 @@ function Activity() {
   }, []);
 
   return (
-    <div className="w-full md:w-[768px]  h-fit md:p-2 p-3 flex flex-col relative justify-between items-center">
+    <div className="w-full md:w-[768px]  h-[900px] md:p-2 p-3 flex flex-col relative justify-between items-center">
       <div className="h-auto w-full  bg-black border-white flex flex-col justify-center items-center border-opacity-30 p-2">
         <div className="w-full flex gap-1 justify-between overflow-x-scroll">
           <All />

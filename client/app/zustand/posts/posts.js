@@ -7,12 +7,17 @@ const usePosts = create ((set) => ({
     setPost: (postData) => set({ post: postData }),
     serUser: (postUser) => set({ user: postUser}),
 
+    
 
     repliposts:[],
     setRepliposts: (postData) => set({repliposts: postData}),
 
     replies: [],
     setReplies: (postData) => set({replies: postData}),
+    
+    likes: false,
+    setLikes: () => set((state) => ({ likes: !state.likes })),
+    
 
     repliPost:false, 
     setRepliPost: () => set({repliPost: true, selected:"repliPost"}),

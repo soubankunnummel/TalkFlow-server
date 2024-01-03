@@ -2,7 +2,7 @@ import { followers } from '@/app/service/users'
 import usersStore from '@/app/zustand/users/usersStore'
 import React, { useEffect } from 'react'
 
-function BtnFollowers() {
+function BtnFollowers() { 
 
 
 

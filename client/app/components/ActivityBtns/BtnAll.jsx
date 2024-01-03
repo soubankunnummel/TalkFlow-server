@@ -3,7 +3,7 @@ import usersStore from '@/app/zustand/users/usersStore'
 import React from 'react'
 
 function All() {
-
+ 
   const {setOutFollowers }  = usersStore()
   const handleClick =  () => {
     setOutFollowers()

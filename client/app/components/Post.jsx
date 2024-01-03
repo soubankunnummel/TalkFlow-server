@@ -14,11 +14,17 @@ import FollowPost from "./FollowPost";
 import useFolloPost from "../zustand/posts/followPost";
 import ForuFollow from "./ForuFollow";
 import UserModal from "./UserModal";
+import { getPostuser, getProfielPost, getProfile } from "../service/users";
+import useProfileStore from "../zustand/users/profileStore";
+import useProfile from "../zustand/posts/profilePost";
+import usePosts from "../zustand/posts/posts";
 
 const Post = () => {
   const { feed } = useFolloPost();
-  const [post, setPost] = useState([]);
-  // console.log("posts",post)
+  
+  const {setProfile} = useProfileStore()
+  const {setUserProfil} = useProfile()
+  const { setPost, serUser, post } = usePosts();
 
   // user modal setap
   // const [userInfo, setUserInfo] = useState({
@@ -33,6 +39,24 @@ const Post = () => {
   // const handleMouseLeave = () => {
   //   setOutShowModal();
   // };
+  const hadleProfile = async (username) => {
+    
+    try {
+      const response = await getProfile(username)
+      const profilePost = await getProfielPost(username)
+      const postUser = await getPostuser(username)
+      if(response && profilePost && postUser){
+        await setProfile(response)
+        await serUser(postUser)
+        await setPost(profilePost)
+        await setUserProfil()
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
 
   const [loading, setLoading] = useState(true);
 
@@ -99,7 +123,7 @@ const Post = () => {
                                   : "bottom-1 left-4"
                               } rounded-full`}
                               style={{
-                                backgroundImage: `url(${reply.userProfilePic})`,
+                                backgroundImage: `url(${reply.userProfilePic ? reply.userProfilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png" })`,
                                 backgroundSize: "cover",
                               }}
                             ></div>
@@ -113,6 +137,7 @@ const Post = () => {
                           className="font-medium text-white hover:underline"
                           // onMouseEnter={handleMouseEnter}
                           // onMouseLeave={handleMouseLeave}
+                          onClick={() => hadleProfile(item.postedBy.username)}
                         >
                           {item.postedBy.username}{" "}
                         </span>
@@ -147,7 +172,7 @@ const Post = () => {
                         </div>
                       </div>
                       <div className="flex gap-1 mx-2 mt-10 items-center">
-                        <Like /> <Coment /> <Repost /> <Share />
+                        <Like postId={item._id} index={index}/> <Coment /> <Repost /> <Share />
                       </div>
                       <div className="w-auto h-3 text-white text-opacity-20 gap-2 flex ms-3">
                         <span>{item.replies.length} replies .</span>

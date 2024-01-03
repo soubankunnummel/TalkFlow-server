@@ -5,8 +5,13 @@ import create  from 'zustand'
 const usePostsStroe = create ((set) => ({
 
     postedBy: null,
-    text    : null,
+    text    : "",
     image     : null,
+    username: "",
+    setUserName: (userData) => set({username: userData}),
+
+    userId:"",
+    setUserId: (userData) => set({userId:userData}),
 
     setPostedBy: (postedBy) => set({postedBy}),
     setText    : (text) => set({text}),

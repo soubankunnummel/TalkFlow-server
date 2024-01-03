@@ -11,7 +11,7 @@ import usePosts from "../zustand/posts/posts";
 
 function ProfilePost() {
   const [loading, setLoading] = useState(false);
-  const { post, user } = usePosts();
+  const { post, user } = usePosts(); 
 
   useEffect(() => { 
     setLoading(post.length === 0);
@@ -23,7 +23,7 @@ function ProfilePost() {
         <Loading />
       ) : (
         <>
-          {post.map((item) => (
+          {post.map((item, index) => (
             <div
               className=" w-full md:w-[580px] h-auto  md:p-2 p-3 flex flex-col relative top-[-27px]  justify-between items-center mb-10 "
               key={item._id}
@@ -47,28 +47,25 @@ function ProfilePost() {
                     <div className="  h-fit md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg"></div>
 
                     <div className="w-10 h-10 relative flex justify-center">
-                      <div className="w-5 h-5 bg-black absolute top-0 right-0 rounded-full"
-                     style={{
-                      backgroundImage:
-                        "url('https://img.freepik.com/free-photo/people-holding-wechat-icon_53876-63371.jpg?size=626&ext=jpg&ga=GA1.1.1677573732.1702106196&semt=ais')",
-                      backgroundSize: "contain",
-                    }}
-                      ></div>
-                      <div className="w-4 h-4 bg-black absolute top-2 left-1 rounded-full"
-                      
-                      style={{
-                        backgroundImage:
-                          "url('https://img.freepik.com/free-photo/people-holding-wechat-icon_53876-63371.jpg?size=626&ext=jpg&ga=GA1.1.1677573732.1702106196&semt=ais')",
-                        backgroundSize: "contain",
-                      }}></div>
-                      <div className="w-3 h-3 bg-black absolute bottom-1 left-4 rounded-full"
-                      
-                      style={{
-                        backgroundImage:
-                          "url('https://img.freepik.com/free-photo/people-holding-wechat-icon_53876-63371.jpg?size=626&ext=jpg&ga=GA1.1.1677573732.1702106196&semt=ais')",
-                        backgroundSize: "contain",
-                      }}></div>
-                    </div>
+                          {item.replies.slice(0, 3).map((reply, index) => (
+                            <div
+                              key={index}
+                              className={`w-${5 - index} h-${
+                                5 - index
+                              } bg-black absolute ${
+                                index === 0
+                                  ? "top-0 right-0"
+                                  : index === 1
+                                  ? "top-2 left-1"
+                                  : "bottom-1 left-4"
+                              } rounded-full`}
+                              style={{
+                                backgroundImage: `url(${reply.userProfilePic ? reply.userProfilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"})`,
+                                backgroundSize: "cover",
+                              }}
+                            ></div>
+                          ))}
+                        </div>
 
                   </div>
                 </div>
@@ -103,8 +100,8 @@ function ProfilePost() {
                     <Like /> <Coment /> <Repost /> <Share />
                   </div>
                   <div className="w-auto h-3 text-white text-opacity-20 gap-2 flex ms-3">
-                    <span>72 replies</span>
-                    <span>500 likes</span>
+                    <span>{item.replies.length} replies</span>
+                    <span>{item.likes.length} likes</span>
                   </div>
                 </div>
               </div>

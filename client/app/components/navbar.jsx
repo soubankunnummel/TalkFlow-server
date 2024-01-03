@@ -15,6 +15,7 @@ import { IoImagesOutline } from "react-icons/io5";
 import usePostsStroe from "../zustand/posts/postStroe";
 import { createPost } from "../service/post";
 import { useForm } from 'react-hook-form';
+import CreatePostModal from "./PostModal";
 
 
 var username;
@@ -24,7 +25,7 @@ function NavBar() {
   const fileInputRef = useRef(null);
   const { setPost, serUser } = usePosts();
   let {postedBy, setPostedBy, text, setText, image, setImage, resetState} = usePostsStroe()
-  const { setProfile, setOutProfile, setSearch, setLikes } = useProfile();
+  const { setProfil, setOutProfile, setSearch, setLikes } = useProfile();
   // const { handleSubmit, register, setValue } = useForm();
   const router = useRouter();
   
@@ -60,14 +61,14 @@ function NavBar() {
       const response = await getProfielPost(username);
       const user = await getPostuser(username);
 
-      if (response || user) {
+      if (response && user) {
         setPost(response);
         serUser(user);
       }
     } catch (error) {
       console.log(error);
     }
-    setProfile();
+    setProfil();
   };
 
   const handleLikes = () => {
@@ -88,26 +89,50 @@ function NavBar() {
     }
   };
 
-  const handleFileChange = (e) => { 
-    // const file = e.target.files[0];
-    // setImage(file);
-    setImage(e.target.files[0])
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file);
   }
 
-  const handlePostSubmit = async (e) => {
+  // const handlePostSubmit = async (e) => {
+  //   try {
+  //     e.preventDefault();
+  
+  //     setPostedBy(userId);
+  
+  //     console.log('postedBy:', postedBy);
+  //     console.log('text:', text);
+  //     console.log('img:', image);
+  
+  //     const response = await createPost(postedBy, text, image || null);
+  //     if (response) {
+  //       alert("Post created");
+  //       resetState();
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  
+
+
+  const handlePostSubmit = async () => {
     try {
-      e.preventDefault();
-  
       setPostedBy(userId);
+      const formData = new FormData();
+      formData.append("postedBy", postedBy);
+      formData.append("text", text);
+      if (image) {
+        formData.append("img", image);
+      }
+      
+      console.log(formData)
+      const response = await createPost(formData);
   
-      console.log('postedBy:', postedBy);
-      console.log('text:', text);
-      console.log('img:', image);
-  
-      const response = await createPost(postedBy, text, image || null);
       if (response) {
         alert("Post created");
         resetState();
+        // setCreatePostModal(false); // Close the modal after post creation
       }
     } catch (error) {
       console.log(error);
@@ -184,7 +209,7 @@ function NavBar() {
 
 
 
-        <dialog id="my_modal_2" className="modal">
+        {/* <dialog id="my_modal_2" className="modal">
           <div  className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
             <div className="w-full h-5 bg-transparent flex justify-evenly text-white my-2 ">
               <div className="w-3/4 text-center text-md font-bold">
@@ -240,8 +265,13 @@ function NavBar() {
           <form method="dialog" className="modal-backdrop">
             <button>close</button>
           </form>
-        </dialog>
-
+        </dialog> */}
+        <CreatePostModal
+        username={username}
+        setText={setText}
+        handleFileChange={handleFileChange}
+        handlePostSubmit={handlePostSubmit}
+      />
 
 
 

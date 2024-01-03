@@ -43,7 +43,7 @@ export const gePostbyId = async () => {
 
 /// create post 
 
-    export const createPost = async (postedBy,text,img) => {
+    export const createPost = async ({postedBy,text,img}) => {
 
         try {
             const response = await Axios.post(`/api/posts/create`,{postedBy,text,img})
@@ -70,5 +70,18 @@ export const gePostbyId = async () => {
         }
     }
 
+
+/// like and unlike 
+
+    export const likePost = async (postId) => {
+        try {
+            const response = await Axios.post(`/api/posts/like/${postId}`)
+            if(response.status === 200){
+                return response.data
+            }
+        } catch (error) {
+            console.log("error in like post",error)
+        }
+    }
 
 
