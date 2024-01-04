@@ -4,12 +4,7 @@ const  fs = require("fs")
 const path = require("path")
 const multer = require("multer")
 const cloudinary = require("cloudinary").v2
-// const { v2: cloudinary } = require("cloudinary");
 
-// const { v2: cloudinary } = require('cloudinary');
-
-// import multer from 'multer'
-// import {v2 as cloudinary} from 'cloudinary';
 
 const storage = multer.diskStorage({
 
@@ -20,11 +15,12 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({storage})
+
 cloudinary.config({ 
     cloud_name:process.env.CLOUDINARY_NAME,
     api_key:process.env.CLOUDINARY_API,
     api_secret:process.env.CLOUDINARY_SECRET_KEY
- })
+ }) 
 
  const imageUpload = (fieldname) => async (req, res, next) => {
 
@@ -36,7 +32,7 @@ cloudinary.config({
             try {
               
                 if (!req.file) {
-                    return res.status(400).json({ error: "File not provided" });
+                    return next();
                 }
                 
                 console.log(req.file);

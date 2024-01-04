@@ -1,3 +1,5 @@
+import imageUpload from "../middelwares/imageUpload.cjs";
+import postImage from "../middelwares/postImage.cjs";
 import Post  from "../models/postModel.js"
 import User from "../models/userModel.js"
 
@@ -6,13 +8,18 @@ import User from "../models/userModel.js"
 
 const createPost = async (req, res) => {
     try {
-        const { postedBy, text, img } = req.body; 
-        console.log("reqbody:", postedBy,text,img) 
+        const { postedBy, text, img } = req.body;
+
+        console.log("reqbody:",req.body) 
+
+        if(img){ 
+           
+           return postImage()
+        }
 
         if (!postedBy || !text) {
             return res.status(400).json({ message: "PostedBy and text field are required" });
         }
-
         const user = await User.findById(postedBy);
        
 
@@ -30,7 +37,7 @@ const createPost = async (req, res) => {
             return res.status(400).json({ message: `Text must be less than ${maxLength} characters` });
         }
 
-        const newPost = new Post({ postedBy, text, img });
+        const newPost = new Post({ postedBy, text, img: String(img) });
         await newPost.save();
 
         res.status(201).json({ message: "New post created", newPost});

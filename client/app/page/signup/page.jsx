@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode";
 import { signIn } from "next-auth/react"
 
 // import { useGoogleLogin } from "@react-oauth/google"; 
-// import { useCookieToken } from "@/app/service/Token";
+// import { useCookieToken } from "@/app/service/Token"; 
 
 function Signup() {
   // const { data: session } = useSession();
@@ -45,6 +45,9 @@ function Signup() {
     setSignup({ ...signup, [e.target.name]: e.target.value });
   };
 
+  TODO: // add jwt decode
+
+  
   // const login = useGoogleLogin({
   //   flow: "auth-code",
   //   onSuccess: async (response) => {

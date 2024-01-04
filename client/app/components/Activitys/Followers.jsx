@@ -11,8 +11,8 @@ function Followers() {
     <>
       {followerss.length === 0 ? (
         <div className='flex justify-center items-center h-screen text-white text-opacity-25'>
-          <p>No followers to display.</p>
-
+          <p>No followers </p>
+ 
         </div>
       ) : (
         followerss.map((user) => (

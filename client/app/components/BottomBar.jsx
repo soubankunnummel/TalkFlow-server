@@ -7,11 +7,14 @@ import { IoCreateOutline } from "react-icons/io5";
 import useProfile from '../zustand/posts/profilePost';
 import { getPostuser, getProfielPost, getUsr } from '../service/users';
 import usePosts from '../zustand/posts/posts';
+import { useRouter } from 'next/navigation';
 
  
 const BottomBar = () => { 
+
+  const router = useRouter()
   const { setPost, serUser } = usePosts();
-  const { setProfile, setOutProfile, setSearch, setLikes } = useProfile()
+  const { setProfil, setOutProfile, setSearch, setLikes } = useProfile()
   let username
 
   const getUser = async () => {
@@ -27,10 +30,11 @@ const BottomBar = () => {
   };
 
   const handleProfile = async () => {
+    setProfil()
     try {
       const response = await getProfielPost(username);
       const user = await getPostuser(username);
-
+      
       if (response || user) {
         setPost(response);
         serUser(user);
@@ -38,7 +42,6 @@ const BottomBar = () => {
     } catch (error) {
       console.log(error);
     }
-    setProfile();
   };
   useEffect(() => {
     getUser()
@@ -58,7 +61,9 @@ const BottomBar = () => {
     >
       <FiSearch className="text-xl text-white text-opacity-50 hover:text-opacity-90" />
     </button>
-    <button className="btn  px-5 py-4 bg-transparent hover:bg-stone-800 border-none rounded-lg  ">
+    <button className="btn  px-5 py-4 bg-transparent hover:bg-stone-800 border-none rounded-lg  "
+    onClick={() => router.push("/page/create") }
+    >
       <IoCreateOutline className="text-xl text-white text-opacity-50 hover:text-opacity-90" />
     </button>
     <button className="btn  px-5 py-4 bg-transparent hover:bg-stone-800 border-none rounded-lg  "

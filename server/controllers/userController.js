@@ -456,5 +456,5 @@ const getUser = async (req, res) => {
 
    // TODO: add admin  section
 
-    //TODO: add google login
-    //TODO: add forgot passwoerd
+   
+   

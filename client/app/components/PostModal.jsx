@@ -4,7 +4,7 @@ import { IoImagesOutline } from "react-icons/io5";
 import { CgMoreO } from "react-icons/cg";
 
 const CreatePostModal = ({
-  username,
+  username, 
   setText,
   handleFileChange,
   handlePostSubmit,

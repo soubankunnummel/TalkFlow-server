@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading"; 
 import { signIn } from "next-auth/react"
+import toast from "react-hot-toast";
 
 function login() {
   const router = useRouter();
@@ -30,12 +31,11 @@ function login() {
       const response = await loginuser(login);
 
       if (response) {
-        alert("Login successful");
         
         router.refresh()
         router.push("/")
       } else {
-        alert("Invalid username or password");
+        toast.error("Invalid username or password");
       }
     } catch (error) {
       console.error("Error in handleLogin", error);
@@ -53,6 +53,7 @@ const handleGoogleLogin =  () => {
   //   console.error("Error in handleGoogleLogin", error)
   // }
 };
+
 
   const handleForgot = async (e) => {
     try {

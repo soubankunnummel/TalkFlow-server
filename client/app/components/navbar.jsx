@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useId, useRef } from "react";
-import { MdOutlineSort } from "react-icons/md"; 
+import { MdOutlineSort } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { HiHome, HiUser } from "react-icons/hi2";
@@ -14,37 +14,35 @@ import usePosts from "../zustand/posts/posts";
 import { IoImagesOutline } from "react-icons/io5";
 import usePostsStroe from "../zustand/posts/postStroe";
 import { createPost } from "../service/post";
-import { useForm } from 'react-hook-form';
+import { useForm } from "react-hook-form";
 import CreatePostModal from "./PostModal";
-
+import toast from "react-hot-toast";
 
 var username;
-let userId
+let userId;
 function NavBar() {
-  
   const fileInputRef = useRef(null);
   const { setPost, serUser } = usePosts();
-  let {postedBy, setPostedBy, text, setText, image, setImage, resetState} = usePostsStroe()
+  let { postedBy, setPostedBy, text, setText, image, setImage, resetState } =
+    usePostsStroe();
   const { setProfil, setOutProfile, setSearch, setLikes } = useProfile();
   // const { handleSubmit, register, setValue } = useForm();
   const router = useRouter();
-  
-  
+
   const handleCreatePost = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
-  
+
   const getUser = async () => {
     try {
       const response = await getUsr();
-      
-      console.log(response.username)
+
+      console.log(response.username);
       if (response) {
         username = response.username;
-        userId = response._id
-        
+        userId = response._id;
       }
     } catch (error) {
       console.log("Error in nave bar");
@@ -54,7 +52,6 @@ function NavBar() {
   const handleSearch = async () => {
     setSearch();
   };
-
 
   const handleProfile = async () => {
     try {
@@ -81,7 +78,8 @@ function NavBar() {
     try {
       const response = await logoutUser();
       if (response) {
-        alert("Logged out");
+        toast.success("Logged out successfully");
+        
         router.push("/page/login");
       }
     } catch (error) {
@@ -92,88 +90,17 @@ function NavBar() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     setImage(file);
-  }
-
-  // const handlePostSubmit = async (e) => {
-  //   try {
-  //     e.preventDefault();
-  
-  //     setPostedBy(userId);
-  
-  //     console.log('postedBy:', postedBy);
-  //     console.log('text:', text);
-  //     console.log('img:', image);
-  
-  //     const response = await createPost(postedBy, text, image || null);
-  //     if (response) {
-  //       alert("Post created");
-  //       resetState();
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  
-
-
-  const handlePostSubmit = async () => {
-    try {
-      setPostedBy(userId);
-      const formData = new FormData();
-      formData.append("postedBy", postedBy);
-      formData.append("text", text);
-      if (image) {
-        formData.append("img", image);
-      }
-      
-      console.log(formData)
-      const response = await createPost(formData);
-  
-      if (response) {
-        alert("Post created");
-        resetState();
-        // setCreatePostModal(false); // Close the modal after post creation
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
-  
-  // const handleFileChange = (e) => {
-  //   setValue('img', e.target.files[0]);
-  // };
-  
-  // const handlePostSubmit = async (data) => {
-  //   try {
-  //     data.postedBy = userId;
-      
-  //     console.log('data:', data);
-  
-  //     const formData = new FormData();
-  //     formData.append("postedBy", data.postedBy);
-  //     formData.append("text", data.text);
-  //     formData.append("img", data.img);
-  
-  //     const response = await createPost(formData);
-  //     if (response) {
-  //       alert("Post created");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  
-
 
   // creat post
 
   const handleCreatPost = async () => {
-    document.getElementById("my_modal_2").showModal();
+    // document.getElementById("my_modal_2").showModal();
+    router.push("/page/create");
   };
-  
+
   useEffect(() => {
-    getUser()
-    
+    getUser();
   }, []);
 
   return (
@@ -207,73 +134,12 @@ function NavBar() {
           <FiSearch className="text-3xl text-white text-opacity-50  hover:text-opacity-90" />
         </button>
 
-
-
-        {/* <dialog id="my_modal_2" className="modal">
-          <div  className="modal-box w-full h-[300px] bg-transparent flex justify-between flex-col">
-            <div className="w-full h-5 bg-transparent flex justify-evenly text-white my-2 ">
-              <div className="w-3/4 text-center text-md font-bold">
-                New thread
-              </div>
-              <div className="w-auto items-end mt-[1.5px]">
-                <CgMoreO />
-              </div>
-            </div>
-            <div className="w-full h-[400px] bg-stone-900  rounded-3xl">
-              <div className="w-auto h-auto  flex justify-start  my-4 mx-3">
-                <div className="h-[100px] w-8  flex justify-center flex-col gap-1 ms-2 ">
-                  <div className="w-8 h-8 rounded-full bg-white"></div>
-                  <div className="h-8 w-[1px] bg-opacity-20 bg-white ms-4   "></div>
-                  <div className="w-3 h-3 rounded-full bg-white ms-[9px] "></div>
-                </div>
-                <div className="w-auto h-auto flex justify-start items-start flex-col ms-3 mt-3 relative">
-                  <span className="">{username} </span>
-                  <input
-                    type="text"
-                    name="text"
-                    placeholder="Start a thead..."
-                    id=""
-                    onChange={(e) => setText(e.target.value)}
-                    className="border-none outline-none bg-transparent"
-                  />
-                  <button
-                    className=" h-auto px-2 py-3 bg-transparent border-none rounded-lg flex flex-col justify-center items-center"
-                    onClick={handleCreatePost}
-                   
-                  >
-                    <IoImagesOutline className="text-lg text-white text-opacity-50 hover:text-opacity-90" />
-                  </button>
-                  <input
-                    type="file"
-                    name="file"
-                    id="fileInput"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={(e) => handleFileChange(e)}
-                  />
-                </div>
-
-                
-              </div>
-              <div className="w-auto h-auto flex justify-end px-6">
-                  <button className="w-16 h-10 rounded-3xl bg-stone-800 text-black font-medium"type="submit"
-                   onClick={handlePostSubmit}
-                  >Post</button>
-                </div>
-            </div>
-          </div>
-          <form method="dialog" className="modal-backdrop">
-            <button>close</button>
-          </form>
-        </dialog> */}
-        <CreatePostModal
-        username={username}
-        setText={setText}
-        handleFileChange={handleFileChange}
-        handlePostSubmit={handlePostSubmit}
-      />
-
-
+        {/* <CreatePostModal
+          username={username}
+          setText={setText}
+          handleFileChange={handleFileChange}
+          handlePostSubmit={handlePostSubmit}
+        /> */}
 
         <button
           className="btn h-auto  py-n px-7 bg-transparent hover:bg-stone-800 border-none rounded-lg  flex flex-col justify-center items-center"

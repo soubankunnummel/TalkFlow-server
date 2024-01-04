@@ -43,17 +43,37 @@ export const gePostbyId = async () => {
 
 /// create post 
 
-    export const createPost = async ({postedBy,text,img}) => {
+export const createPost = async (fomData) => {
+    try {
+        let headers = {};  // Initialize headers object
 
-        try {
-            const response = await Axios.post(`/api/posts/create`,{postedBy,text,img})
-            if(response.status === 201){
-                return response.data
-            }
-        } catch (error) {
-            console.log("Error in create Post")
+        // Check if fomData has the 'img' field
+        console.log(fomData.has('img'))
+        if (fomData.has('img')) {
+            return headers = {
+                'Content-Type': 'multipart/form-data',
+            };
+        } else {
+             headers = {
+                'Content-Type': 'application/json',
+            };
         }
+
+        const response = await Axios.post(`/api/posts/create`, fomData, { headers });
+
+        console.log("response of image upload", response);
+
+        if (response.status === 201) {
+            return response.data;
+        }
+    } catch (error) {
+        console.log("Error in create Post", error);
     }
+};
+
+
+
+
 
 // get replied posts  with reply
 
@@ -81,6 +101,19 @@ export const gePostbyId = async () => {
             }
         } catch (error) {
             console.log("error in like post",error)
+        }
+    }
+
+//delete post 
+
+    export const postDelet = async (id) => {
+        try {
+            const response = await Axios.delete(`/api/posts/${id}`)
+            if(response){
+                return response.data
+            }
+        } catch (error) {
+            console.log("error in delet product")
         }
     }
 

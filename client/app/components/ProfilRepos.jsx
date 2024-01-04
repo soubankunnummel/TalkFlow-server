@@ -4,7 +4,7 @@ import Like from './Like'
 import Coment from './Coment'
 import Repost from './Repost'
 import Share from './Share'
-import { IoIosMore } from 'react-icons/io'
+import { IoIosMore } from 'react-icons/io' 
 import { MdAddCircle } from 'react-icons/md'
 import Loading from './Loading'
 

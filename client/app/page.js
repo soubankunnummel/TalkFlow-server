@@ -6,6 +6,7 @@ import Login from "./page/login/page";
 import Profile from "./page/profile/page";
 import ForuFollow from "./components/ForuFollow";
 
+
 export default function page() {
   return (
     <div className="bg-black w-full h-auto   flex flex-col ">
