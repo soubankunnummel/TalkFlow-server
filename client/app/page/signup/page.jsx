@@ -1,16 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { googleSing, signupUser } from "@/app/service/auth";
 import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react";
+import useAuthStore from "@/app/zustand/users/authStore";
 
-// import { useGoogleLogin } from "@react-oauth/google"; 
-// import { useCookieToken } from "@/app/service/Token"; 
+// import { useGoogleLogin } from "@react-oauth/google";
+// import { useCookieToken } from "@/app/service/Token";
+let username
+let email
+let userData
 
 function Signup() {
-  // const { data: session } = useSession();
+  const { data: session , mutate} = useSession();
+  const {
+    googleUserName,
+    setGoogleUserName,
+    setGoogleEmail,
+    googleEmail,
+    setGoogleProfile,
+    googleProfile,
+  } = useAuthStore();
 
   const router = useRouter();
   const [signup, setSignup] = useState({
@@ -31,13 +43,13 @@ function Signup() {
       return alert("Pleas fill althe inputs");
     }
     try {
-      const response = await signupUser()
-      if(response){
+      const response = await signupUser();
+      if (response) {
         alert("sinup succes");
         router.push("/page/login");
       }
     } catch (error) {
-      console.log("Erron in singup")
+      console.log("Erron in singup");
     }
   };
 
@@ -45,9 +57,8 @@ function Signup() {
     setSignup({ ...signup, [e.target.name]: e.target.value });
   };
 
-  TODO: // add jwt decode
+  // TODO: // add jwt decode
 
-  
   // const login = useGoogleLogin({
   //   flow: "auth-code",
   //   onSuccess: async (response) => {
@@ -58,29 +69,87 @@ function Signup() {
   //   onFailure: (error) => console.error("Google login error:", error),
   // });
 
-  const handleGoogleLogin = async (res) => {
-    const decoded = jwtDecode(res.credential);
-    console.log(decoded)
-    await googleSing(decoded)
-    // setAccount(decoded);
-    // await addUser(decoded);
+  // console.log("username", data)
 
-  };
-  // const handleGoogleLogin = async () => {
-  //   try {
-  //     // Make a POST request for Google login
-  //     const response = await axios.post('http://localhost:5000/api/users/login/google');
 
-  //     if (response.status === 200) {
-  //       alert('Google login successful');
-  //       // Redirect or perform additional actions as needed
-  //     }
-  //   } catch (error) {
-  //     console.error('Error in Google login:', error.message);
-  //     // Handle error
+
+  
+  // useEffect(() => {
+  //   if (session && session.user) {
+      
+  //     const username = session.user.name
+  //     const email = session.user.email
+  //     const profilePic = session.user.image
+
+
+  //     setGoogleUserName(username);
+  //     setGoogleEmail(email);
+  //     setGoogleProfile(profilePic);
+  //     console.log("in a variabel",username)
+  //     console.log("emil in varebel", email);
+  //     console.log("profile", profilePic);
+  //     // console.log("usr name", session.user.email);
   //   }
-  // };
+  // }, []);
 
+  useEffect(() => {
+    if (session && session.user) {
+      setGoogleUserName(session.user.name);
+      setGoogleEmail(session.user.email);
+      setGoogleProfile(session.user.image);
+    }
+  }, [session]);
+
+
+  const handleGoogleLogin = async () => {
+    try {
+      await signIn("google");
+
+      // Access the values directly from the state
+      const userData = {
+        username: googleUserName,
+        email: googleEmail,
+        profilePic: googleProfile,
+      };
+
+      // Call the googleSing function with userData
+      const response = await googleSing(userData);
+      if(response){
+
+        mutate(null);
+        return router.push("/page/login");
+      }
+
+      
+      
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // if(userData){
+  //    googleSing(userData);
+  //   return router.push("/page/login");
+  // }
+
+
+
+
+  // if (response?.error) {
+  //   console.error("Error during Google login:", response.error);
+  // } else if (response?.ok) {
+  //   const decoded = response.data;
+
+  //   // Access and log desired user data:
+  //   const { id, displayName, emails } = decoded;
+  //   console.log("User Information:", {
+  //     id,
+  //     displayName,
+  //     emails,
+  //   });
+
+  //
+  // }
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
@@ -130,6 +199,12 @@ function Signup() {
         >
           Sign Up
         </button>
+
+        <span className="text-center text-stone-700 text-sm hover:text-white">
+          <a href="#" onClick={() => router.push("/page/login")} className="">
+            Alredy have Account ?
+          </a>
+        </span>
         <span className="text-center text-stone-700 text-sm hover:text-white"></span>
         <div className="flex items-center gap-3">
           <hr className="w-full border-t-[1px] border-gray-500" />
@@ -140,9 +215,9 @@ function Signup() {
         <span className="text-center my-3">
           <button
             className="bg-transparent border-y-pink-200  text-white w-80 h-12 rounded-2xl border border-white flex items-center justify-center"
-            onClick={() => signIn("google")}
+            onClick={handleGoogleLogin}
           >
-            <FcGoogle className="mx-5" /> Continue with Google
+            <FcGoogle className="mx-5" /> Signup with Google
           </button>
         </span>
       </div>

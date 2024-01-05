@@ -1,14 +1,20 @@
 "use client";
-import { forgorPassword, loginuser } from "@/app/service/auth";
-import React, { useState } from "react";
+import { forgorPassword, googleLogin, loginuser } from "@/app/service/auth";
+import React, { useEffect, useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading"; 
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import toast from "react-hot-toast";
+import { getPostuser, getProfielPost } from "@/app/service/users";
+import usePosts from "@/app/zustand/posts/posts";
+import useAuthStore from "@/app/zustand/users/authStore";
 
 function login() {
+  const { data: session , mutate} = useSession();
+  const {setGoogleEmail, googleEmail,} = useAuthStore()
   const router = useRouter();
+  const { setPost, serUser } = usePosts();
   const [email, setEmail] = useState("")
   const [login, setLogin] = useState({
     username: "",
@@ -25,17 +31,23 @@ function login() {
 
   const handleLogin = async () => {
     if (login.username === "" || login.password === "")
-      return alert("pleas fill all inputs");
-      setLoading(true)
+      return toast.error("pleas fill all inputs");
+      
     try {
-      const response = await loginuser(login);
 
+      const response = await loginuser(login);
       if (response) {
-        
-        router.refresh()
-        router.push("/")
+        setLoading(true)
+        const post = await getProfielPost(login.username);
+        const user = await getPostuser(login.username);
+        if(post && user) {
+          await setPost(post)
+          await serUser(user)
+        }
+         router.push("/")
       } else {
-        toast.error("Invalid username or password");
+         toast.error("Invalid username or password")
+       
       }
     } catch (error) {
       console.error("Error in handleLogin", error);
@@ -45,15 +57,45 @@ function login() {
 
 // google login
 
-const handleGoogleLogin =  () => {
-  // try {
-      signIn("google")
-      router.push("/");
-  // } catch (error) {
-  //   console.error("Error in handleGoogleLogin", error)
-  // }
+useEffect(() => {
+  if (session && session.user) {
+
+    setGoogleEmail(session.user.email);
+  }
+},[session ])
+
+const handleGoogleLogin = async () => {
+  try {
+   await signIn("google")
+   await mutate(null)
+  } catch (error) {
+    console.error("Error in handleGoogleLogin", error)
+  }
+  return Glogin()
 };
 
+  async function Glogin () {
+    try {
+      const userData = {
+        email:googleEmail
+      }
+      const response =  await googleLogin(userData)
+      if(response){
+       return router.push("/")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+
+}
+// const userData = {
+//   email:googleEmail
+//  }
+ 
+//  if(response){
+
+//      return router.push("/");
+//  }
 
   const handleForgot = async (e) => {
     try {
@@ -121,6 +163,12 @@ const handleGoogleLogin =  () => {
               Forgot Password?
             </a>
           </span>
+          <span className="text-center text-stone-700 text-sm hover:text-white">
+            <a href="#" onClick={() => router.push("/page/signup")} className="">
+              Create Account 
+            </a>
+          </span>
+          
           <div className="flex items-center gap-3">
             <hr className="w-full border-t-2 border-gray-500" />
             <span className="text-gray-500">or</span>

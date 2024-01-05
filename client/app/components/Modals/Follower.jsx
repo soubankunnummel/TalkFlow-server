@@ -27,8 +27,15 @@ function Follower() {
       <div>
         <dialog id="my_modal_2" className="modal">
           <div className="modal-box bg-stone-900">
-            {followerss.map((user, index) => (
-              <div className="w-full h-auto flex flex-col md:flex-row justify-between items-center border-b-[1px] border-white border-opacity-20 text-white mt-3 p-3">
+            {folloUnfollowUser.length === 0 ? (
+              <div className='flex justify-center items-center h-screen text-white text-opacity-25'>
+              <p>No followers </p>
+     
+            </div>
+            ): (
+                <>
+              {followerss.map((user, index) => (
+                <div className="w-full h-auto flex flex-col md:flex-row justify-between items-center border-b-[1px] border-white border-opacity-20 text-white mt-3 p-3">
                 <div className="w-full md:w-1/2 h-auto flex justify-start gap-2 items-center mb-3 md:mb-0">
                   <div className="w-12 h-12 bg-black rounded-full overflow-hidden">
                     <img
@@ -54,14 +61,18 @@ function Follower() {
                 </div>
 
                 <div
-                  className=" active:scale-95 w-full md:w-28 h-9 border border-white border-opacity-20 rounded-lg flex justify-center items-center"
-                  onClick={() => handleFollow(user._id, index)}
+                className=" active:scale-95 w-full md:w-28 h-9 border border-white border-opacity-20 rounded-lg flex justify-center items-center"
+                onClick={() => handleFollow(user._id, index)}
                 >
-                  <button> {followStates[index] ? "Unfollow" : "Follow"}</button>
+                <button> {followStates[index] ? "Unfollow" : "Follow"}</button>
                 
                 </div>
-              </div>
-            ))}
+                </div>
+                ))}
+              </>
+              )}
+
+
           </div>
           <form method="dialog" className="modal-backdrop">
             <button>close</button>

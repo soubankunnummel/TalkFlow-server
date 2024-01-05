@@ -234,7 +234,7 @@ const getRepliedPosts = async (req, res) => {
             console.log("folow",following)
 
         //    const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 });
-           const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 });
+           const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 }).populate("postedBy")
 
             if(!feedPost) return res.status(404).json({message:"Post not fount"})
 

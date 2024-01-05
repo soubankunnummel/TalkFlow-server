@@ -45,7 +45,7 @@ function NavBar() {
         userId = response._id;
       }
     } catch (error) {
-      console.log("Error in nave bar");
+      console.log("Error in nave bar",error);
     }
   };
 

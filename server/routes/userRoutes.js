@@ -8,6 +8,7 @@ import {
   getUser,
   getUserProfile,
   googleLogin,
+  googleSignup,
   loginUser,
   logoutUser,
   resetPassword,
@@ -26,7 +27,8 @@ router.get("/user-profile/:username", getProfile);
 router.get("/users", allUsers);
 router.post("/signup", signupUser);
 router.post("/login", loginUser);
-router.post("/login/google", googleLogin);
+router.post("/signup-google", googleSignup)
+router.post("/login-google", googleLogin);
 router.post("/forgot-password", fogotPassword);
 router.post("/verify-otp",validateOTP)
 router.post("/reset-password", resetPassword); 

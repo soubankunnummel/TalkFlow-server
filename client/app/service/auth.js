@@ -18,11 +18,13 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       console.log(error.message);
     }
   };
+
+// google signup  
   
   const googleSing = async (data) => {
     try {
       const response = await Axios.post(
-        `/api/users/login/google`,
+        `/api/users/signup-google`,
         data
         );
         return response.data;
@@ -30,6 +32,25 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         console.log("Error in Google login", error);
       }
     };
+
+
+// google login
+
+    export const  googleLogin = async (data) => {
+      try {
+        const response = await Axios.post(`/api/users/login-google`,data)
+        if( response.status === 200){
+          
+          return response.data
+        }
+
+      } catch (error) {
+        console.log("error in google Login",error)
+      }
+    }
+
+
+// log in
     
     const loginuser = async (data) => {
       try {
@@ -111,5 +132,5 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         console.log("Error in Reset passwoerd",error)
       }
     }
-  export { signupUser, googleSing, loginuser, logoutUser, forgorPassword, verifyOtp, resetPassword};
+  export { signupUser, googleSing, loginuser, logoutUser, forgorPassword, verifyOtp, resetPassword,};
   

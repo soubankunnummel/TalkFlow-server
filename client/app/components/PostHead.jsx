@@ -2,10 +2,11 @@
 import React, { useState } from "react"; 
 import ForYou from "./Foryou";
 import FolloWing from "./Following";
+import { useRouter } from "next/navigation";
 
 const PostHead = () => {
   const [activeComponent, setActiveComponent] = useState(false);
-
+  const router = useRouter()
   const [data ,setData] = useState()
   return (
     <>
@@ -24,7 +25,9 @@ const PostHead = () => {
           {" "}
         </div>
 
-        <button className="w-3/2 mx-4 text-white text-opacity-40 text-md   h-full flex justify-center items-center ">
+        <button className="w-3/2 mx-4 text-white text-opacity-40 text-md   h-full flex justify-center items-center "
+        onClick={() => router.push("/page/create")}
+        >
           Start thread ...  
         </button>
           </div>

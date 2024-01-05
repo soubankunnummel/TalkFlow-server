@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { MdAddCircle } from "react-icons/md";
 
 function FollowPost() {
-
+ 
 
     const [post, setPost] = useState([]);
     const [loading, setLoading] = useState(true);

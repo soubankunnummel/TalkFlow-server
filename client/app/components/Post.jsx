@@ -25,20 +25,8 @@ const Post = () => {
   const {setProfile} = useProfileStore()
   const {setUserProfil} = useProfile()
   const { setPost, serUser, post } = usePosts();
-
-  // user modal setap
-  // const [userInfo, setUserInfo] = useState({
-  //   username: 'username',
-  //   followersCount: 1000, 
-  // });
-
-  // const handleMouseEnter = () => {
-  //   setShowModal();
-  // };
-
-  // const handleMouseLeave = () => {
-  //   setOutShowModal();
-  // };
+  console.log("Pooost",post)
+ 
   const hadleProfile = async (username) => {
     
     try {
@@ -96,7 +84,7 @@ const Post = () => {
                         <div
                           className="h-10 w-10 rounded-full bg-white box-border "
                           style={{
-                            backgroundImage: `url(${item.postedBy.profilePic ?  item.postedBy.profilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"})`,
+                            backgroundImage: `url(${item.postedBy && item.postedBy.profilePic ?  item.postedBy.profilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"})`,
                             backgroundSize: "cover",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center",
@@ -135,22 +123,12 @@ const Post = () => {
                       <div className="w-full flex m-3 justify-between gap-3 items-center">
                         <span
                           className="font-medium text-white hover:underline"
-                          // onMouseEnter={handleMouseEnter}
-                          // onMouseLeave={handleMouseLeave}
+                         
                           onClick={() => hadleProfile(item.postedBy.username)}
                         >
-                          {item.postedBy.username}{" "}
+                          {item.postedBy && item.postedBy.username}{" "}
                         </span>
-                        {/* {showModal && (
-                        
-                            <UserModal
-                           
-                              username={item.postedBy.username}
-                              followersCount={userInfo.followersCount}
-                              onClose={handleMouseLeave}
-                            /> 
-                          
-                        )} */}
+                       
                         <div className="flex justify-between gap-3 items-center ">
                           <span className="text-xs text-opacity-40 text-white">
                             14 h

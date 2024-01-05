@@ -3,6 +3,7 @@ import "./globals.css";
 // import StoreProvider from "./Redux/store/storeProvider";
 import { Toaster } from "react-hot-toast";
 import TostProvider from "./components/TostProvider";
+import SessionProvid from "./providers/sessionProvider";
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
 const inter = Inter({ subsets: ["latin"] });
@@ -16,10 +17,13 @@ export default function RootLayout({ children }) {
   return (
     <>
       {/* <StoreProvider> */}
+
       <html lang="en">
         <body className={inter.className}>
-          <TostProvider />
-         {children}
+          <SessionProvid>
+            <TostProvider />
+            {children}
+          </SessionProvid>
         </body>
       </html>
       {/* </StoreProvider> */}

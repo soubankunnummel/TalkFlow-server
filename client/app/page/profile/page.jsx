@@ -88,11 +88,18 @@ function Profile() {
 
             <div className="flex justify-stretch ">
               { profile.user && profile.user.followers.length !== 0 && (
-                <div className="flex gap-1 mt-5">
-                  {profile.user.followers.map((follower,index) => (
+                <div className="flex gap-1 mt-5 relative">
+                  {profile.user.followers.slice(0, 2).map((follower,index) => (
                     <div
                       key={follower._id}
-                      className="w-4 h-4 rounded-full bg-white"
+                      className={`w-4 h-4 bg-black absolute ${
+                        index === 0
+                          ? "top-0 right-0"
+                          : index === 1
+                          ? "top-0 left-1"
+                          : "bottom-1 left-4" 
+                      } rounded-full`}
+
                       style={{
                         backgroundImage: `url(${
                           follower.profilePic
@@ -107,7 +114,7 @@ function Profile() {
               )}
               <Follower />
 
-              <span className="mt-4 text-white text-opacity-20 ms-5 hover:underline" 
+              <span className="mt-4 text-white text-opacity-20 mx-8 hover:underline" 
               onClick={viewFollowers}
               >
                 {" "}

@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const userSchima = mongoose.Schema({
     name:{
         type:String,
-        required:true,
+        required:false,
     },
     username: {
         type:String,
@@ -18,7 +18,7 @@ const userSchima = mongoose.Schema({
     password: {
         type:String,
         minLength:6,
-        required:true,
+        required:false,
     },
     profilePic: {
         type: String,
