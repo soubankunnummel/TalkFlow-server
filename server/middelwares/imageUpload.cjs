@@ -26,7 +26,7 @@ cloudinary.config({
 
     //  console.log("requsets",req.body)   
      upload.single(fieldname)(req, res, async (err) => {
-         if (err) {
+         if (err) { 
              return res.status(400).json({ error: err.message });
             }
             try {

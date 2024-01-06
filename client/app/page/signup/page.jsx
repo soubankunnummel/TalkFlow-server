@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { signIn, useSession } from "next-auth/react";
 import useAuthStore from "@/app/zustand/users/authStore";
+import toast from "react-hot-toast";
 
 // import { useGoogleLogin } from "@react-oauth/google";
 // import { useCookieToken } from "@/app/service/Token";
@@ -43,9 +44,9 @@ function Signup() {
       return alert("Pleas fill althe inputs");
     }
     try {
-      const response = await signupUser();
+      const response = await signupUser(signup);
       if (response) {
-        alert("sinup succes");
+        toast.success("sinup succes");
         router.push("/page/login");
       }
     } catch (error) {
@@ -57,40 +58,11 @@ function Signup() {
     setSignup({ ...signup, [e.target.name]: e.target.value });
   };
 
-  // TODO: // add jwt decode
-
-  // const login = useGoogleLogin({
-  //   flow: "auth-code",
-  //   onSuccess: async (response) => {
-  //     const decodedData = jwtDecode(response.credential);
-  //     console.log(decodedData);
-  //     await googleSing(decodedData);
-  //   },
-  //   onFailure: (error) => console.error("Google login error:", error),
-  // });
-
-  // console.log("username", data)
 
 
 
-  
-  // useEffect(() => {
-  //   if (session && session.user) {
-      
-  //     const username = session.user.name
-  //     const email = session.user.email
-  //     const profilePic = session.user.image
 
 
-  //     setGoogleUserName(username);
-  //     setGoogleEmail(email);
-  //     setGoogleProfile(profilePic);
-  //     console.log("in a variabel",username)
-  //     console.log("emil in varebel", email);
-  //     console.log("profile", profilePic);
-  //     // console.log("usr name", session.user.email);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (session && session.user) {
@@ -119,9 +91,7 @@ function Signup() {
         mutate(null);
         return router.push("/page/login");
       }
-
-      
-      
+  
     } catch (error) {
       console.log(error);
     }

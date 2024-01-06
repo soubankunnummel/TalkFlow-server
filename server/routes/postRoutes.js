@@ -1,14 +1,15 @@
 import exprss from 'express'
-import { createPost, deletePost, getFeedPosts, getPostbyId, getPosts, getRepliedPosts, likePost, replaPost, sharePost, updatePost } from '../controllers/postController.js'
+import { createPost, deletePost, getFeedPosts, getPostbyId, getPosts, getRepliedPosts, likePost, postCreate, replaPost, sharePost, updatePost } from '../controllers/postController.js'
 import protectRoute from '../middelwares/protectRoute.js'
 import imageUpload from '../middelwares/imageUpload.cjs'
 import postImage from '../middelwares/postImage.cjs'
 
 const router = exprss.Router()
-router.get("/feed",protectRoute, getFeedPosts)
+router.get("/feed",protectRoute, getFeedPosts) 
 router.get("/",getPosts)
 router.get("/:id", getPostbyId)
-router.post("/create", protectRoute, createPost)     
+router.post("/create", protectRoute, createPost)   
+router.post('/create-post', protectRoute, postImage, postCreate )  
 router.put("/:id", protectRoute,updatePost)
 router.delete("/:id",protectRoute,deletePost)  
 router.post("/like/:id",protectRoute,likePost)

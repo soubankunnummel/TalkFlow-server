@@ -66,23 +66,27 @@ useEffect(() => {
 
 const handleGoogleLogin = async () => {
   try {
-   await signIn("google")
-   await mutate(null)
+    await signIn("google", {
+      onSuccess: async (session) => {
+        await mutate(null);
+        await Glogin(); 
+      },
+    });
   } catch (error) {
-    console.error("Error in handleGoogleLogin", error)
+    console.error("Error in handleGoogleLogin", error);
   }
-  return Glogin()
 };
+
 
   async function Glogin () {
     try {
       const userData = {
         email:googleEmail
       }
-      const response =  await googleLogin(userData)
-      if(response){
+        await googleLogin(userData)
+     
        return router.push("/")
-      }
+      
     } catch (error) {
       console.log(error)
     }

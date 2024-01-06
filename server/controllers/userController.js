@@ -68,7 +68,7 @@ const getProfile = async (req, res) => {
 const signupUser = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
-    console.log(name);
+    console.log(req.body);
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
 
@@ -181,7 +181,8 @@ const folloUnfollowUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   // console.log("creaded")
-  const { name, email, username, password, bio } = req.body;
+  const { name, email, username, password, bio } = req.body; 
+  console.log("profile updae ",req.body)
   let { profilePic } = req.body;
 
   console.log("Profiel pic form boy", profilePic);

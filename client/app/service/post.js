@@ -45,21 +45,23 @@ export const gePostbyId = async () => {
 
 export const createPost = async (fomData) => {
     try {
-        let headers = {};  // Initialize headers object
+        // let headers = {};  
+        // console.log(fomData.has('img'))
+        // if (fomData.has('img')) {
+        //     return headers = {
+        //         'Content-Type': 'multipart/form-data',
+        //     };
+        // } else {
+        //      headers = {
+        //         'Content-Type': 'application/json',
+        //     };
+        // }
 
-        // Check if fomData has the 'img' field
-        console.log(fomData.has('img'))
-        if (fomData.has('img')) {
-            return headers = {
+        const response = await Axios.post(`/api/posts/create-post`, fomData, { 
+            headers: {
                 'Content-Type': 'multipart/form-data',
-            };
-        } else {
-             headers = {
-                'Content-Type': 'application/json',
-            };
-        }
-
-        const response = await Axios.post(`/api/posts/create`, fomData, { headers });
+            }
+         });
 
         console.log("response of image upload", response);
 

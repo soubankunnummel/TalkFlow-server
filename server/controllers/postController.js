@@ -4,14 +4,14 @@ import Post  from "../models/postModel.js"
 import User from "../models/userModel.js"
 
 
-// Create a post  
+// Create a post    
 
 const createPost = async (req, res) => {
     try {
         const { postedBy, text, img } = req.body;
 
         console.log("reqbody:",req.body) 
-
+ 
         if(img){ 
            
            return postImage()
@@ -47,6 +47,38 @@ const createPost = async (req, res) => {
     }
 };
 
+
+
+/// create post 
+
+    export const postCreate = async (req, res) => {
+        console.log("request from postcreae:", req.body)  
+        try {
+            const { text, img } = req.body;
+            
+
+            // if(img){
+            //     return postImage()
+            // }
+
+            if (!text && !img) {
+                return res.status(400).json({ error: 'Text or Image must be provided' });
+            }
+    
+            const newPost = new Post({
+                text,
+                img,
+                postedBy: req.user._id, 
+            });
+    
+            await newPost.save();
+    
+            res.status(201).json({ message: 'Post created successfully', post: newPost });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+            console.error('Error in create post API:', error);
+        }
+    }
 
 // Get all posts
 

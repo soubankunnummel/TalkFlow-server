@@ -10,12 +10,13 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   const signupUser = async (signup) => {
     try {
-      const response = await Axios.post(`${baseUrl}/api/users/signup`, signup);
+      const response = await Axios.post(`/api/users/signup`, signup);
+      console.log(response) 
       const token = response.data.token
       localStorage.setItem("jwt",token)
       return response.data;
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
     }
   };
 

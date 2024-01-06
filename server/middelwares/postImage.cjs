@@ -26,14 +26,15 @@ const postImage = (req, res, next) => {
         try {
             if (!req.file) {
                 console.log("File not provided");
-                return res.status(400).json({ error: "File not provided" });
+                // return res.status(400).json({ error: "File not provided" });
+                return next()
             }
 
-            const result = await cloudinary.uploader.upload(req.file.path, {
+            const result = await cloudinary.uploader.upload(req.file.path, { 
                 folder: "TalkFlow-users",
             });
 
-            console.log("Working");
+            console.log("Working from posimag middlw ware");
             req.body.img = result.secure_url;
             fs.unlink(req.file.path, (unlinkErr) => {
                 if (unlinkErr) {

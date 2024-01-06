@@ -21,30 +21,27 @@ import usePosts from "../zustand/posts/posts";
 
 const Post = () => {
   const { feed } = useFolloPost();
-  
-  const {setProfile} = useProfileStore()
-  const {setUserProfil} = useProfile()
+
+  const { setProfile } = useProfileStore();
+  const { setUserProfil } = useProfile();
   const { setPost, serUser, post } = usePosts();
-  console.log("Pooost",post)
- 
+  console.log("Pooost", post);
+
   const hadleProfile = async (username) => {
-    
     try {
-      const response = await getProfile(username)
-      const profilePost = await getProfielPost(username)
-      const postUser = await getPostuser(username)
-      if(response && profilePost && postUser){
-        await setProfile(response)
-        await serUser(postUser)
-        await setPost(profilePost)
-        await setUserProfil()
+      const response = await getProfile(username);
+      const profilePost = await getProfielPost(username);
+      const postUser = await getPostuser(username);
+      if (response && profilePost && postUser) {
+        await setProfile(response);
+        await serUser(postUser);
+        await setPost(profilePost);
+        await setUserProfil();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-
-
-  }
+  };
 
   const [loading, setLoading] = useState(true);
 
@@ -73,7 +70,7 @@ const Post = () => {
           <PostHead />
           {!feed ? (
             <>
-              {post.map((item,index) => (
+              {post.map((item, index) => (
                 <div
                   className=" w-full md:w-[580px] h-auto  md:p-2 p-3 flex flex-col  justify-between items-center mb-10 "
                   key={index}
@@ -84,18 +81,23 @@ const Post = () => {
                         <div
                           className="h-10 w-10 rounded-full bg-white box-border "
                           style={{
-                            backgroundImage: `url(${item.postedBy && item.postedBy.profilePic ?  item.postedBy.profilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"})`,
+                            backgroundImage: `url(${
+                              item.postedBy && item.postedBy.profilePic
+                                ? item.postedBy.profilePic
+                                : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+                            })`,
                             backgroundSize: "cover",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center",
                           }}
-                        
                         >
                           <button className=" relative top-5 left-5  ">
                             <MdAddCircle className="text-2xl hover:scale-110 " />
                           </button>
                         </div>
-                        <div  className={` md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg cross-line `}></div>
+                        <div
+                          className={` md:h-[450px] w-[1px] bg-white bg-opacity-30 rounded-lg cross-line `}
+                        ></div>
 
                         <div className="w-10 h-10 relative flex justify-center">
                           {item.replies.slice(0, 3).map((reply, index) => (
@@ -111,7 +113,11 @@ const Post = () => {
                                   : "bottom-1 left-4"
                               } rounded-full`}
                               style={{
-                                backgroundImage: `url(${reply.userProfilePic ? reply.userProfilePic : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png" })`,
+                                backgroundImage: `url(${
+                                  reply.userProfilePic
+                                    ? reply.userProfilePic
+                                    : "https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
+                                })`,
                                 backgroundSize: "cover",
                               }}
                             ></div>
@@ -123,12 +129,11 @@ const Post = () => {
                       <div className="w-full flex m-3 justify-between gap-3 items-center">
                         <span
                           className="font-medium text-white hover:underline"
-                         
                           onClick={() => hadleProfile(item.postedBy.username)}
                         >
                           {item.postedBy && item.postedBy.username}{" "}
                         </span>
-                       
+
                         <div className="flex justify-between gap-3 items-center ">
                           <span className="text-xs text-opacity-40 text-white">
                             14 h
@@ -142,15 +147,20 @@ const Post = () => {
                       <div className="h-fit w-auto md:h-[400px] m-2">
                         <p className="my-2 mx-2">{item.text}</p>
                         <div className=" w-fit h-fit md:h-full md:w-full rounded-xl ">
-                          <img
-                            className="rounded-xl  w-full h-full "
-                            src={item.img}
-                            alt="Post images"
-                          />
+                          {item.img ? (
+                            <img
+                              className="rounded-xl w-full h-full"
+                              src={item.img}
+                              alt="...."
+                            />
+                          ) : (
+                            ""
+                          )}
                         </div>
                       </div>
                       <div className="flex gap-1 mx-2 mt-10 items-center">
-                        <Like postId={item._id} index={index}/> <Coment /> <Repost /> <Share />
+                        <Like postId={item._id} index={index} /> <Coment />{" "}
+                        <Repost /> <Share />
                       </div>
                       <div className="w-auto h-3 text-white text-opacity-20 gap-2 flex ms-3">
                         <span>{item.replies.length} replies .</span>

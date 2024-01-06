@@ -105,3 +105,22 @@ import Axios from "./axios"
             console.log("Error in get User Profile ", error)
         }
     }
+
+// Edit profile
+
+    export const editProfile = async (id, fomData) => {
+        console.log("id from modal",id)
+        try {
+            const respons = await Axios.put(`/api/users/update/${id}`,fomData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+            })
+            console.log("added :",respons)
+            if(respons.status === 200){
+                return respons.data
+            }
+        } catch (error) {
+            console.log("Error in Edit Profile", error)
+        }
+    }
