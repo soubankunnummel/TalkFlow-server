@@ -41,7 +41,7 @@ function Signup() {
       signup.email === "" ||
       signup.password === ""
     ) {
-      return alert("Pleas fill althe inputs");
+      return toast.error("Pleas fill althe inputs");
     }
     try {
       const response = await signupUser(signup);
@@ -50,7 +50,9 @@ function Signup() {
         router.push("/page/login");
       }
     } catch (error) {
-      console.log("Erron in singup");
+      toast.error("User alredy registred")
+      
+      console.log("Erron in singup",error);
     }
   };
 

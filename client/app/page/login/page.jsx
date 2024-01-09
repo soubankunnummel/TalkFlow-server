@@ -35,7 +35,7 @@ function login() {
       
     try {
 
-      const response = await loginuser(login);
+      const response = await loginuser(login)
       if (response) {
         setLoading(true)
         const post = await getProfielPost(login.username);
@@ -66,9 +66,19 @@ useEffect(() => {
 
 const handleGoogleLogin = async () => {
   try {
+    // await signIn("google")
+    // await mutate(null)
+    // await Glogin()
+    //  {
+      // onSuccess: async (session) => {
+      //   // await mutate(null);
+      //   await Glogin(); 
+      // },
+    // });
+
     await signIn("google", {
       onSuccess: async (session) => {
-        await mutate(null);
+        await mutate(null); 
         await Glogin(); 
       },
     });
@@ -77,29 +87,27 @@ const handleGoogleLogin = async () => {
   }
 };
 
+async function Glogin () {
+  try {
+    const userData = {
+      email:googleEmail
+    }
+    console.log("googleemio- workign",googleEmail)
+      const response =  await googleLogin(userData)
+      console.log("resopons",response)
+      if(response){
+        toast.success("login success..")
+        router.push("/")
 
-  async function Glogin () {
-    try {
-      const userData = {
-        email:googleEmail
       }
-        await googleLogin(userData)
      
-       return router.push("/")
       
     } catch (error) {
       console.log(error)
     }
 
 }
-// const userData = {
-//   email:googleEmail
-//  }
- 
-//  if(response){
 
-//      return router.push("/");
-//  }
 
   const handleForgot = async (e) => {
     try {
@@ -123,7 +131,8 @@ const handleGoogleLogin = async () => {
         document.getElementById('my_modal_5').close()
         const response = await forgorPassword(email)
         if(response){
-          alert("OTP sented to your email")
+          setLoading(false)
+          toast.success("OTP sented to your email")
           router.push("/page/verify")
         }
     } catch (error) {

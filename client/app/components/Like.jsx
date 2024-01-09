@@ -1,39 +1,48 @@
 import { GoHeart } from "react-icons/go";
-
-import React, { useState } from 'react'
-import { likePost } from "../service/post";
+import React, { useState, useEffect } from 'react';
+import { getPost, likePost } from "../service/post";
 import usePosts from "../zustand/posts/posts";
 import { IoHeart } from "react-icons/io5";
 
-function Like({postId, index}) { 
+function Like({ postId, index , username}) {
+  const [likeStates, setLikeStates] = useState([]);
+  const { likes, setLikes , setPost} = usePosts();
 
-  const [LikeStates, setLikeStates] = useState([]);
+  useEffect(() => {
+    const likedStatesFromStorage = JSON.parse(localStorage.getItem('likedStates')) || [];
+    setLikeStates(likedStatesFromStorage);
+  }, []);
 
-  const {likes, setLikes} = usePosts()
   const handleClick = async () => {
     try {
-      const response = await likePost(postId)
-      if(response ){ 
+      const response = await likePost(postId);
+      const post =  await getPost();
+      // console.log("post in like ", post)
+      if (response && post) {
+        setPost(post)
         setLikeStates((prevState) => {
-          const newState = [...prevState]
-          newState[index] = !prevState[index]
-          return newState
-        })
-        setLikes()
-       
+          const newState = [...prevState];
+          newState[index] = !prevState[index];
+          return newState;
+        });
+
+        localStorage.setItem('likedStates', JSON.stringify(likeStates));
+
+        setLikes();
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
+
   return (
-    <div className="w-9 h-9 bg-transparent hover:bg-stone-900 rounded-full flex justify-center items-center"
-    onClick={handleClick}
+    <div
+      className="w-9 h-9 bg-transparent hover:bg-stone-900 rounded-full flex justify-center items-center"
+      onClick={handleClick}
     >
-      {LikeStates[index] ? <IoHeart  className="text-2xl text-red-700" /> : <GoHeart className="text-2xl " /> }
-        
+      {likeStates[index] ?   <IoHeart className="text-2xl text-red-700" /> : <GoHeart className="text-2xl" />  }
     </div>
-  )
+  );
 }
 
-export default Like
+export default Like;

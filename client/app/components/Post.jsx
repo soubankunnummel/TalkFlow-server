@@ -18,6 +18,7 @@ import { getPostuser, getProfielPost, getProfile } from "../service/users";
 import useProfileStore from "../zustand/users/profileStore";
 import useProfile from "../zustand/posts/profilePost";
 import usePosts from "../zustand/posts/posts";
+import Reply from "./Modals/Reply";
 
 const Post = () => {
   const { feed } = useFolloPost();
@@ -25,13 +26,13 @@ const Post = () => {
   const { setProfile } = useProfileStore();
   const { setUserProfil } = useProfile();
   const { setPost, serUser, post } = usePosts();
-  console.log("Pooost", post);
 
   const hadleProfile = async (username) => {
     try {
       const response = await getProfile(username);
       const profilePost = await getProfielPost(username);
       const postUser = await getPostuser(username);
+
       if (response && profilePost && postUser) {
         await setProfile(response);
         await serUser(postUser);
@@ -146,22 +147,25 @@ const Post = () => {
                       </div>
                       <div className="h-fit w-auto md:h-[400px] m-2">
                         <p className="my-2 mx-2">{item.text}</p>
-                        <div className=" w-fit h-fit md:h-full md:w-full rounded-xl ">
+                        <div className=" w-auto h-auto md:h-full md:w-full rounded-xl ">
                           {item.img ? (
                             <img
-                              className="rounded-xl w-full h-full"
+                              className="rounded-xl w-auto h-full"
                               src={item.img}
                               alt="...."
-                            />
+                            /> 
                           ) : (
                             ""
                           )}
                         </div>
                       </div>
                       <div className="flex gap-1 mx-2 mt-10 items-center">
-                        <Like postId={item._id} index={index} /> <Coment />{" "}
+                        <Like postId={item._id} index={index} username={item.postedBy.username}/>
+                         <Coment postId={item._id} index={index}  />{" "} 
                         <Repost /> <Share />
+
                       </div>
+                      <Reply />
                       <div className="w-auto h-3 text-white text-opacity-20 gap-2 flex ms-3">
                         <span>{item.replies.length} replies .</span>
                         <span>{item.likes.length} likes</span>
@@ -174,6 +178,7 @@ const Post = () => {
           ) : (
             <FollowPost />
           )}
+
 
           <ForuFollow />
         </>

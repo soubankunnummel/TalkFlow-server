@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Loading from "@/app/components/Loading";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { resetPassword } from "@/app/service/auth";
+import toast from "react-hot-toast";
 
 function ResetPassword() {
   const router = useRouter();
@@ -35,16 +36,14 @@ function ResetPassword() {
     setLoading(true);
 
     try {
-      // Assuming you have a service function for resetting the password
       const response = await resetPassword(email, newPassword);
 
       if (response) {
-        alert("Password reset successful");
+        toast.success("Password reset successful");
         router.push("/page/login")
       }
     } catch (error) {
       console.log("Error in password reset", error);
-      // Handle error, display an error message, or redirect to an error page
     } finally {
       setLoading(false);
     }

@@ -3,7 +3,17 @@ import create from 'zustand'
 const usePosts = create ((set) => ({
     post: [], 
     user:'',
+
+    postbyid:{},
+    setPostById: (postData) => set({postbyid: postData}),
+
+    profilePic:"",
+    setProfilePic:(postData) => set({profilePic:postData}),
     
+    replyText : "",
+    setReplyText: (postdata) => set({replyText:postdata}),
+
+
     setPost: (postData) => set({ post: postData }),
     serUser: (postUser) => set({ user: postUser}),
 

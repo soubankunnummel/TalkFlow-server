@@ -45,7 +45,7 @@ function NavBar() {
         userId = response._id;
       }
     } catch (error) {
-      console.log("Error in nave bar",error);
+      console.log("Error in nave bar", error);
     }
   };
 
@@ -79,7 +79,7 @@ function NavBar() {
       const response = await logoutUser();
       if (response) {
         toast.success("Logged out successfully");
-        
+
         router.push("/page/login");
       }
     } catch (error) {
@@ -118,7 +118,26 @@ function NavBar() {
             backgroundImage: `url("https://seeklogo.com/images/T/threads-logo-1ABBA246BE-seeklogo.com.png")`,
             backgroundSize: "contain",
           }}
-        ></div>{" "}
+        ></div>
+        <div className="dropdown dropdown-end text-3xl absolute right-0 md:hidden">
+          <div tabIndex={0} role="button">
+            <MdOutlineSort />
+          </div>
+          <ul
+            tabIndex={0}
+            className="p-2 shadow menu dropdown-content z-[1] bg-stone-900 rounded-box w-52"
+          >
+            <li>
+              <a>Item 1</a>
+            </li>
+            <li>
+              <a>Item 2</a>
+            </li>
+            <li>
+              <a onClick={() => router.push("page/login")}>Log out</a>
+            </li>
+          </ul>
+        </div>{" "}
       </div>
       <div className=" text-white font-thin h-auto md:flex hidden  ">
         <button
@@ -136,7 +155,7 @@ function NavBar() {
 
         {/* <CreatePostModal
           username={username}
-          setText={setText}
+          setText={setText} 
           handleFileChange={handleFileChange}
           handlePostSubmit={handlePostSubmit}
         /> */}
@@ -162,7 +181,7 @@ function NavBar() {
       </div>
       <div className="text-3xl text-white text-opacity-50 font-thin md:flex hidden ">
         {" "}
-        <div className="dropdown dropdown-end ">
+        <div className="dropdown dropdown-end md:flex justify-end ">
           <div tabIndex={0} role="button">
             {" "}
             <MdOutlineSort />{" "}
@@ -175,7 +194,7 @@ function NavBar() {
               <a>Item 1</a>
             </li>
             <li>
-              <a>Item 2</a>
+              <a>Swich Appearnse</a>
             </li>
             <li>
               <a onClick={handleLogout}>Log out</a>

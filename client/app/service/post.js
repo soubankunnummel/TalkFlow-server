@@ -7,7 +7,7 @@ export const getPost = async () => {
             const response = await Axios.get(`/api/posts/`)
             if(response.status === 200){
                 
-                return response.data 
+                return response.data  
             }
         } catch (error) {
             console.log("error in getPosts ",error.message)
@@ -17,6 +17,7 @@ export const getPost = async () => {
 // get feed post
 
     export const getFeed = async () => {
+        
         try {
             const response = await Axios.get( `/api/posts/feed`,)
             if(response.status === 200){
@@ -29,8 +30,8 @@ export const getPost = async () => {
 
 /// Post by ID 
 
-export const gePostbyId = async () => {
-    try {
+export const gePostbyId = async (id) => {
+    try { 
         const response = await Axios.get(`/api/posts/${id}`)
         if(response.status === 200){
             return response.data
@@ -45,17 +46,7 @@ export const gePostbyId = async () => {
 
 export const createPost = async (fomData) => {
     try {
-        // let headers = {};  
-        // console.log(fomData.has('img'))
-        // if (fomData.has('img')) {
-        //     return headers = {
-        //         'Content-Type': 'multipart/form-data',
-        //     };
-        // } else {
-        //      headers = {
-        //         'Content-Type': 'application/json',
-        //     };
-        // }
+       
 
         const response = await Axios.post(`/api/posts/create-post`, fomData, { 
             headers: {
@@ -119,4 +110,17 @@ export const createPost = async (fomData) => {
         }
     }
 
+// Reply post
+
+    export const replaPost = async (id,text) => {
+        console.log("text",text)
+        try {
+            const response = await Axios.post(`/api/posts/replay/${id}`,{text})
+            if(response){
+                return response.data
+            }
+        } catch (error) {
+            console.log("Error in reply post", error)
+        }
+    } 
 

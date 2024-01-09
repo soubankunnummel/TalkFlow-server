@@ -68,7 +68,6 @@ const getProfile = async (req, res) => {
 const signupUser = async (req, res) => {
   try {
     const { name, email, username, password } = req.body;
-    console.log(req.body);
 
     const existingUser = await User.findOne({ $or: [{ email }, { username }] });
 
@@ -288,9 +287,10 @@ const googleLogin = async (req, res) => {
     
     generateTokenAndSetCookie(user._id, res);
     res.status(200).json({
+      message:"login success",
       _id: user._id,  
       email: user.email,
-      username: user.username,
+      username: user.username, 
       profilePic: user.profilePic,
       bio: user.bio,
     });
@@ -322,19 +322,19 @@ const fogotPassword = async (req, res) => {
         pass: process.env.GMAIL_PASSWORD,
       },
     });
-
     const mailOptions = {
       from: process.env.GMAIL_EMAIL,
       to: email,
       subject: "Password Reset OTP",
       text: `Your OTP for password reset is: ${otp}`,
     };
-
+    
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.log(error, "info:", info);
         return res.status(500).json({ error: "Failed to send OTP email" });
       }
+      console.log("working")
 
       console.log("Email sent: " + info.response);
       res.status(200).json({ message: "OTP sent to your email" });
@@ -397,7 +397,7 @@ const resetPassword = async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
+    user.password = hashedPassword; 
     user.resetPasswordOTP = null;
     await user.save();
 

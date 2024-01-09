@@ -2,6 +2,7 @@
 import axios from "axios";
 import Axios from "./axios";
 import useToken from "./context";
+import toast from "react-hot-toast";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const { setToken: setCookieToken } = useToken();
@@ -16,6 +17,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
       localStorage.setItem("jwt",token)
       return response.data;
     } catch (error) {
+      toast.error(error.response.error)
       console.log(error);
     }
   };
@@ -40,8 +42,11 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
     export const  googleLogin = async (data) => {
       try {
         const response = await Axios.post(`/api/users/login-google`,data)
+        console.log("responst:--", response)
         if( response.status === 200){
-          
+          const token = response.data.token
+          localStorage.setItem("G-jwt",token)
+          console.log("gootoken",token)
           return response.data
         }
 

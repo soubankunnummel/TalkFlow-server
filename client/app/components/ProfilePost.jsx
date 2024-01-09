@@ -11,10 +11,13 @@ import usePosts from "../zustand/posts/posts";
 import { postDelet } from "../service/post";
 import toast from "react-hot-toast";
 import { getProfielPost } from "../service/users";
+import useProfileStore from "../zustand/users/profileStore";
 
 function ProfilePost() {
   const [loading, setLoading] = useState(false);
   const { post, user, setPost } = usePosts();
+  const { profile } = useProfileStore();
+  console.log("profil",profile.profilePic)
 
   useEffect(() => {
     setLoading(!post);
@@ -59,7 +62,7 @@ function ProfilePost() {
                         <div
                           className="h-10 w-10 rounded-full bg-white box-border "
                           style={{
-                            backgroundImage: `url(${user.profilePic ? user.profilePic : " https://cdn-icons-png.flaticon.com/512/6596/6596121.png "})`,
+                            backgroundImage: `url(${profile.user ? profile.user.profilePic : " https://cdn-icons-png.flaticon.com/512/6596/6596121.png "})`,
                             backgroundSize: "cover",
                             backgroundRepeat: "no-repeat",
                             backgroundPosition: "center",
@@ -139,7 +142,7 @@ function ProfilePost() {
                         <p className="my-2 mx-2">{item.text}</p>
                         <div className=" w-fit h-fit md:h-full md:w-full rounded-xl ">
                           <img
-                            className="rounded-xl  w-full h-full "
+                            className="rounded-xl  w-fit h-full "
                             src={item.img}
                             alt="Post images"
                           />

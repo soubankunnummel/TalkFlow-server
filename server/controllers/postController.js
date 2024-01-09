@@ -6,55 +6,55 @@ import User from "../models/userModel.js"
 
 // Create a post    
 
-const createPost = async (req, res) => {
-    try {
-        const { postedBy, text, img } = req.body;
+// const createPost = async (req, res) => {
+//     try {
+//         const { postedBy, text, img } = req.body;
 
-        console.log("reqbody:",req.body) 
+//         console.log("reqbody:",req.body) 
  
-        if(img){ 
+//         if(img){ 
            
-           return postImage()
-        }
+//            return postImage()
+//         }
 
-        if (!postedBy || !text) {
-            return res.status(400).json({ message: "PostedBy and text field are required" });
-        }
-        const user = await User.findById(postedBy);
+//         if (!postedBy || !text) {
+//             return res.status(400).json({ message: "PostedBy and text field are required" });
+//         }
+//         const user = await User.findById(postedBy);
        
 
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
 
-        if (user._id.toString() !== req.user._id.toString()) {
-            return res.status(401).json({ message: "Unauthorized to create post" });
-        }
+//         if (user._id.toString() !== req.user._id.toString()) {
+//             return res.status(401).json({ message: "Unauthorized to create post" });
+//         }
 
-        const maxLength = 500;
+//         const maxLength = 500;
 
-        if (text.length > maxLength) {
-            return res.status(400).json({ message: `Text must be less than ${maxLength} characters` });
-        }
+//         if (text.length > maxLength) {
+//             return res.status(400).json({ message: `Text must be less than ${maxLength} characters` });
+//         }
 
-        const newPost = new Post({ postedBy, text, img: String(img) });
-        await newPost.save();
+//         const newPost = new Post({ postedBy, text, img: String(img) });
+//         await newPost.save();
 
-        res.status(201).json({ message: "New post created", newPost});
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-        console.log("Error in createPost: ", error.message); 
-    }
-};
+//         res.status(201).json({ message: "New post created", newPost});
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//         console.log("Error in createPost: ", error.message); 
+//     }
+// };
 
 
 
 /// create post 
 
     export const postCreate = async (req, res) => {
-        console.log("request from postcreae:", req.body)  
         try {
             const { text, img } = req.body;
+            console.log("reqbody",req.body)
             
 
             // if(img){
@@ -89,7 +89,7 @@ const createPost = async (req, res) => {
                 path: 'postedBy',
                 select: ['username', 'profilePic']
                 
-            })
+            }).sort({createdAt : -1})
 
             
             if(!post) return res.status(400).json({message:"No Post yet"})
@@ -108,7 +108,7 @@ const createPost = async (req, res) => {
             const post = await Post.findById(req.params.id)
             if(!post) return res.status(404).json({message:"Post not fount"})
 
-            res.status(200).json(post)
+            res.status(200).json(post) 
         } catch (error) {
             res.status(500).json({ message: error.message });
             console.log("Error in getpost ById",error.message)
@@ -190,10 +190,9 @@ const createPost = async (req, res) => {
             const {text} = req.body
             const PostId = req.params.id
             const userId = req.user._id
-            const userProfilePic = req.user.profilePic
+            const userProfilePic = req.user.profilePic 
             const username = req.user.username
 
-            console.log("userId :",userId, username,userProfilePic)
 
             const user = await User.findById(userId)
 
@@ -243,7 +242,7 @@ const getRepliedPosts = async (req, res) => {
 
         
         // const replies  = user.repliedPosts.replies
-        console.log(user)
+   
         res.status(200).json( {repliedPosts} );
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -263,7 +262,7 @@ const getRepliedPosts = async (req, res) => {
             if(!user) return res.status(404).json({message:"user not found"})
 
             const following = user.following;
-            console.log("folow",following)
+            // console.log("folow",following)
 
         //    const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 });
            const feedPost = await Post.find({ postedBy: { $in: following } }).sort({ createdAt: -1 }).populate("postedBy")
@@ -323,5 +322,5 @@ const getRepliedPosts = async (req, res) => {
     }
 };
 
-    export {createPost, getPosts, getPostbyId, updatePost,
+    export { getPosts, getPostbyId, updatePost,
          deletePost, likePost, replaPost, getFeedPosts, sharePost, getRepliedPosts}

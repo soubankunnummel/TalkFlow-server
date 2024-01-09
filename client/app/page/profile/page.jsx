@@ -20,15 +20,16 @@ function Profile() {
   const { selected } = usePosts();
   const { profile, setProfile } = useProfileStore();
   const { setFollowerss} = usersStore()
-  // console.log(profile.user && profile.user.name);
   const getUser = async () => {
     try {
       const response = await getUsr();
+      console.log(response)
 
       // console.log(response.username);
       if (response) {
         username = response.username;
         userId = response._id;
+     
         await fechData();
       }
     } catch (error) {
@@ -48,9 +49,7 @@ function Profile() {
     }
   }
 
-  const handelEditProfile = async () => {
-    document.getElementById('my_modal_3').showModal()
-  }
+ 
 
   const fechData = async () => {
     try {
@@ -141,7 +140,7 @@ function Profile() {
           </div>
         </div>
         <button className="w-full h-10 bg-transparent border border-opacity-20 border-white text-center rounded-md mt-3"
-        onClick={handelEditProfile}
+        onClick={() => document.getElementById('my_modal_3').showModal()}
         >
           Edit Profile
         </button>

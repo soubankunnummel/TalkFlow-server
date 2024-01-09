@@ -3,9 +3,11 @@ import React, { useState } from "react";
 import ForYou from "./Foryou";
 import FolloWing from "./Following";
 import { useRouter } from "next/navigation";
+import useProfileStore from "../zustand/users/profileStore";
 
 const PostHead = () => {
   const [activeComponent, setActiveComponent] = useState(false);
+  const {profilePic} = useProfileStore()
   const router = useRouter()
   const [data ,setData] = useState()
   return (
@@ -18,8 +20,9 @@ const PostHead = () => {
           className="h-10 w-10 rounded-full bg-white box-border "
           style={{
             backgroundImage:
-            "url('https://img.freepik.com/free-photo/people-holding-wechat-icon_53876-63371.jpg?size=626&ext=jpg&ga=GA1.1.1677573732.1702106196&semt=ais')",
+            `url(${profilePic})`,
             backgroundSize: "contain",
+            backgroundSize: "cover",
           }}
           >
           {" "}
