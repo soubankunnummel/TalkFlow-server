@@ -70,7 +70,7 @@ export const createPost = async (fomData) => {
 
 // get replied posts  with reply
 
-    export const getRepliedPosts = async () => {
+    export const getRepliedPosts = async () => { 
         try {
             const response = await Axios.post(`/api/posts/replies`)
             console.log(response.data)
@@ -94,6 +94,20 @@ export const createPost = async (fomData) => {
             }
         } catch (error) {
             console.log("error in like post",error)
+        }
+    }
+
+// get notification 
+
+    export const getNotification = async () => {
+        try {
+            const response = await Axios.post(`/api/posts/notification`)
+            console.log(response)
+            if(response.status === 200){
+                return response.data
+            }
+        } catch (error) {
+            console.log("error in create post", error)
         }
     }
 

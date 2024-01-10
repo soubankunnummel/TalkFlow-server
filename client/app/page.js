@@ -8,6 +8,7 @@ import ForuFollow from "./components/ForuFollow";
 
 
 export default function page() {
+   
   return (
     <div className="bg-black w-full h-auto   flex flex-col ">
 

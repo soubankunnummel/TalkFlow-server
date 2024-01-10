@@ -83,7 +83,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
         const response = await Axios.post(`/api/users/logout`); 
             
         if (response.status === 200) {
-          document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          localStorage.removeItem("jwt")
           return response.data.message;
         }
       } catch (error) {

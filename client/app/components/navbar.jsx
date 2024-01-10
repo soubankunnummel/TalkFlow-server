@@ -1,39 +1,28 @@
 "use client";
-import React, { useEffect, useId, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { MdOutlineSort } from "react-icons/md";
 import { IoCreateOutline } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 import { HiHome, HiUser } from "react-icons/hi2";
 import { useRouter } from "next/navigation";
 import { logoutUser } from "../service/auth";
-import { CgMoreO } from "react-icons/cg";
 import useProfile from "../zustand/posts/profilePost";
 import { GoHeart } from "react-icons/go";
 import { getPostuser, getProfielPost, getUsr } from "../service/users";
 import usePosts from "../zustand/posts/posts";
-import { IoImagesOutline } from "react-icons/io5";
-import usePostsStroe from "../zustand/posts/postStroe";
-import { createPost } from "../service/post";
-import { useForm } from "react-hook-form";
-import CreatePostModal from "./PostModal";
 import toast from "react-hot-toast";
+import { useTheme } from "next-themes";
 
 var username;
 let userId;
 function NavBar() {
   const fileInputRef = useRef(null);
   const { setPost, serUser } = usePosts();
-  let { postedBy, setPostedBy, text, setText, image, setImage, resetState } =
-    usePostsStroe();
+  const { theme, setTheme } = useTheme();
   const { setProfil, setOutProfile, setSearch, setLikes } = useProfile();
-  // const { handleSubmit, register, setValue } = useForm();
   const router = useRouter();
 
-  const handleCreatePost = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
+  
 
   const getUser = async () => {
     try {
@@ -49,9 +38,6 @@ function NavBar() {
     }
   };
 
-  const handleSearch = async () => {
-    setSearch();
-  };
 
   const handleProfile = async () => {
     try {
@@ -68,9 +54,6 @@ function NavBar() {
     setProfil();
   };
 
-  const handleLikes = () => {
-    setLikes();
-  };
 
   // logout
 
@@ -87,38 +70,39 @@ function NavBar() {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-  };
+  // theam chnaging
 
-  // creat post
-
-  const handleCreatPost = async () => {
-    // document.getElementById("my_modal_2").showModal();
-    router.push("/page/create");
-  };
+  // const currentTheam = theam === 'system' ?  systemTeam: theam
+  const handleToggleTheme = () => {
+    console.log('Current theme:', theme)
+    setTheme(theme === "dark" ? "light" : "dark");
+  }
 
   useEffect(() => {
-    getUser();
+    getUser()
   }, []);
 
   return (
     <div
-      className="w-full h-auto mt-0 p-5 bg-black flex  justify-between items-center sticky top-0 bg-opacity-90  "
-      style={{
-        zIndex: 1000,
-      }}
-    >
+    className={`w-full h-auto mt-0 p-5 flex  justify-between items-center sticky top-0 bg-opacity-90 ${
+      theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white '
+    }`}
+    style={{
+      zIndex: 1000,
+    }}
+  >
       <div className="text-xs  font-thin w-full md:w-auto flex justify-center">
         {" "}
         <div
-          className="md:h-14 md:w-14 h-8 w-8 bg-black"
+          className={`md:h-14 md:w-14 h-8 w-8${
+            theme === 'dark' ? 'bg-white text-black' : 'bg-black text-white '
+          }`}
           style={{
             backgroundImage: `url("https://seeklogo.com/images/T/threads-logo-1ABBA246BE-seeklogo.com.png")`,
             backgroundSize: "contain",
           }}
         ></div>
+    
         <div className="dropdown dropdown-end text-3xl absolute right-0 md:hidden">
           <div tabIndex={0} role="button">
             <MdOutlineSort />
@@ -144,11 +128,11 @@ function NavBar() {
           className="btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center "
           onClick={() => setOutProfile()}
         >
-          <HiHome className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
+          <HiHome className={`text-3xl text-white text-opacity-50 hover:text-opacity-90`} />
         </button>
         <button
           className=" btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800 border-none  rounded-lg flex flex-col justify-center items-center"
-          onClick={handleSearch}
+          onClick={() =>  setSearch()}
         >
           <FiSearch className="text-3xl text-white text-opacity-50  hover:text-opacity-90" />
         </button>
@@ -162,13 +146,13 @@ function NavBar() {
 
         <button
           className="btn h-auto  py-n px-7 bg-transparent hover:bg-stone-800 border-none rounded-lg  flex flex-col justify-center items-center"
-          onClick={handleCreatPost}
+          onClick={() => router.push("/page/create")}
         >
           <IoCreateOutline className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
         <button
           className="btn h-auto px-7 py-5 bg-transparent hover:bg-stone-800  rounded-lg  border-none flex flex-col justify-center items-center "
-          onClick={handleLikes}
+          onClick={(() => setLikes())}
         >
           <GoHeart className="text-3xl text-white text-opacity-50 hover:text-opacity-90" />
         </button>
@@ -194,11 +178,20 @@ function NavBar() {
               <a>Item 1</a>
             </li>
             <li>
-              <a>Swich Appearnse</a>
+              <a onClick={handleToggleTheme}>Swich Appearnse</a>
             </li>
+
+            { localStorage.getItem("jwt") ? (
             <li>
               <a onClick={handleLogout}>Log out</a>
             </li>
+
+            ): (
+            <li>
+              <a onClick={() => router.push("/page/login")}>LogIn</a>
+            </li>
+
+            )}
           </ul>
         </div>
       </div>
