@@ -102,7 +102,7 @@ export const createPost = async (fomData) => {
     export const getNotification = async () => {
         try {
             const response = await Axios.post(`/api/posts/notification`)
-            console.log(response)
+            console.log(response.data)
             if(response.status === 200){
                 return response.data
             }

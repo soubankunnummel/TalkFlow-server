@@ -24,7 +24,12 @@ const notificationSchema = new mongoose.Schema({
   createdAt:{
     type:Date,
     default: Date.now
-  }
+  },
+  type: {
+    type: String,
+    enum: ['like', 'comment', 'follow'], 
+    required: true,
+  },
 });
 
 const Notification = mongoose.model('Notification', notificationSchema);

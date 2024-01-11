@@ -16,7 +16,7 @@ import { useTheme } from "next-themes";
 var username;
 let userId;
 function NavBar() {
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null); 
   const { setPost, serUser } = usePosts();
   const { theme, setTheme } = useTheme();
   const { setProfil, setOutProfile, setSearch, setLikes } = useProfile();

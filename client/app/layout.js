@@ -5,6 +5,7 @@ import { Toaster } from "react-hot-toast";
 import TostProvider from "./components/TostProvider";
 import SessionProvid from "./providers/sessionProvider";
 import TeamProvider from "./providers/TeamProvider";
+// import { SocketContextProvider } from "./context/SocketContext";
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
 const inter = Inter({ subsets: ["latin"] });
@@ -24,7 +25,10 @@ export default function RootLayout({ children }) {
           <SessionProvid>
             <TeamProvider>
             <TostProvider />
+            {/* <SocketContextProvider> */}
+
             {children}
+            {/* </SocketContextProvider> */}
             </TeamProvider>
           </SessionProvid>
         </body>

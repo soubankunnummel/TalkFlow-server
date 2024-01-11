@@ -31,7 +31,7 @@ import Axios from "./axios"
             console.log("Error in getProfile", error)
         }
     }
- 
+  
 // get logind user 
 
     export const getUsr = async () => {

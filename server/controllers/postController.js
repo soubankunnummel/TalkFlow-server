@@ -178,6 +178,7 @@ const likePost = async (req, res) => {
         reciveUserId: post.postedBy,
         postId: postId,
         message: notificationMessage,
+        type:"like"
       });
 
       await notification.save();
@@ -198,11 +199,11 @@ export const getNotification = async (req, res) => {
       const notifications = await Notification.find({ reciveUserId: userId }) .sort({ createdAt: -1 }).limit(1)
       
   
-      if (!notifications || notifications.length === 0) {
-        return res.status(404).json({ message: "No notifications found" });
-      }
+      // if (!notifications || notifications.length === 0) {
+      //   return res.status(404).json({ message: "No notifications found" });
+      // }
   
-      res.status(200).json({ notifications });
+      res.status(200).json( notifications );
     } catch (error) {
       res.status(500).json({ message: error.message });
       console.log("Error in Get Notifications", error.message);

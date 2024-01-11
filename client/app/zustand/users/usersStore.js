@@ -2,7 +2,7 @@
 
  const usersStore = create ((set) => ({
     user:[], 
-    setUser: (userData) => set({user: userData}),
+    setUser: (userData) => set({user: userData}), 
    
     followerss:[],
     setFollowerss: (userData) => set({followerss: userData}),
