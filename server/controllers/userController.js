@@ -15,11 +15,11 @@ const getUserProfile = async (req, res) => {
   try {
     const user = await User.findOne({ username })
       .select("-password")
-      .select("-updatedAt");
+      .select("-updatedAt")
 
     if (!user) return res.status(404).json({ message: "user not fount" });
 
-    const posts = await Post.find({ postedBy: user.id });
+    const posts = await Post.find({ postedBy: user.id }).sort({createdAt: -1})
 
     const userProfileWithPosts = {
       user: {
@@ -148,6 +148,7 @@ const folloUnfollowUser = async (req, res) => {
     const userModify = await User.findById(id);
     const currentUser = await User.findById(req.user._id).populate("following");
 
+
     if (id === req.user._id.toString())
       return res
         .status(400)
@@ -156,11 +157,11 @@ const folloUnfollowUser = async (req, res) => {
     if (!userModify || !currentUser)
       return res.status(400).json({ message: "User not found" });
 
-    const isFollowing =
-      currentUser.following && currentUser.following.includes(id);
-
+    const isFollowing = currentUser.following.map(user => user._id.toString()).includes(id);
+    console.log("isfollowing: ",currentUser.following)
     if (isFollowing) {
       // unfollow user
+
       await User.findByIdAndUpdate(id, { $pull: { followers: req.user._id } });
       await User.findByIdAndUpdate(req.user._id, { $pull: { following: id } });
       res.status(200).json({ message: "User unfollowed successfully" });

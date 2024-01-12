@@ -196,7 +196,9 @@ const likePost = async (req, res) => {
 export const getNotification = async (req, res) => {
     try {
       const userId = req.user._id;
+      console.log(userId)
       const notifications = await Notification.find({ reciveUserId: userId }) .sort({ createdAt: -1 }).limit(1)
+      console.log(notifications)
       
   
       // if (!notifications || notifications.length === 0) {
@@ -250,13 +252,14 @@ const getRepliedPosts = async (req, res) => {
     const userId = req.user._id;
     // console.log(userId)
 
-    const user = await User.findById(userId).populate({
+    const user = await User.findById(userId).sort({ createdAt: -1 }).populate({
       path: "repliedPosts",
       populate: {
         path: "replies",
         select: "_id userId text userProfilePic username",
       },
-    });
+    })
+    console.log(user)
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
