@@ -46,3 +46,6 @@ const imageUpload = (fieldname) => async (req, res, next) => {
 module.exports = imageUpload;
 
 
+
+
+npm i node-modules bcryptjs cloudinary cookie-parser cors dotenv express express-session joi jsonwebtoken mongoose multer nodemailer passport passport-google-oauth20 randomstring nodemon

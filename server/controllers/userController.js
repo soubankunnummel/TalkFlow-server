@@ -35,6 +35,7 @@ const getUserProfile = async (req, res) => {
     res.status(500).json({ error: error.message });
     console.log("Error in get users profile: ", error.message);
   }
+
 };
 
 // get Profil with profile pic
@@ -177,6 +178,22 @@ const folloUnfollowUser = async (req, res) => {
   }
 };
 
+// check user name is exist
+
+    export const isUserName = async (req, res) => {
+      const {username} = req.body
+      try {
+        if(await User.findOne({username})){ 
+          return  res.status(400).json({message:"Username alredy taken"})
+         }
+         res.status(200).json({message:"User name avilable"})
+      } catch (error) {
+        console.log("Error in check user name")
+      }
+
+    }
+
+
 // Update Usesr
 
 const updateUser = async (req, res) => {
@@ -187,10 +204,15 @@ const updateUser = async (req, res) => {
 
   console.log("Profiel pic form boy", profilePic);
   const userId = req.user._id;
-
+ console.log( req.user._id)
   try {
     let user = await User.findById(userId);
     if (!user) return res.status(400).json({ error: "User not found" });
+
+    if(await User.findOne({username})){ 
+      return  res.status(400).json({message:"Username alredy taken"})
+     }
+ 
 
     if (req.params.id !== userId.toString())
       return res

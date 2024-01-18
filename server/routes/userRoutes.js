@@ -9,6 +9,7 @@ import {
   getUserProfile,
   googleLogin,
   googleSignup,
+  isUserName,
   loginUser,
   logoutUser,
   resetPassword,
@@ -38,6 +39,7 @@ router.get('/user',protectRoute, getUser)
 router.get('/followers',protectRoute, getFollowers)
 router.post("/logout", protectRoute, logoutUser);
 router.post("/follow/:id", protectRoute, folloUnfollowUser);
+router.post("/check-username",protectRoute, isUserName)
 router.put("/update/:id", imageUpload("profilePic"), protectRoute, updateUser);
 
 export default router;

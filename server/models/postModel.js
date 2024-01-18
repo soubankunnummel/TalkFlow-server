@@ -26,7 +26,7 @@ const postSchema = mongoose.Schema(
             ref:" User",
             default: []
         },
-        share: [
+        share: [ // remove
             {
                 userId: {
                     type: mongoose.Schema.Types.ObjectId,
